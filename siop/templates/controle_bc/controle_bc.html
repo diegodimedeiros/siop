@@ -26,8 +26,7 @@
           <path d="M6.34 17.66l-1.41 1.41" />
           <path d="M19.07 4.93l-1.41 1.41" />
         </svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          style="display: none;">
+        <svg class="icon-moon icon-moon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       </button>
@@ -35,7 +34,7 @@
   </nav>
   <div class="tabs-container glass-card">
     <div class="stats-grid">
-      <a class="glass-card stat-card" href="{% url 'chamados' %}" style="text-decoration: none; display: block;">
+      <a class="glass-card stat-card u-block-link" href="{% url 'chamados' %}">
         <div class="stat-header">
           <span class="stat-label">Chamados</span>
         </div>
@@ -43,7 +42,7 @@
         <div class="stat-change positive">Painel de chamados do Controle BC.</div>
       </a>
 
-      <a class="glass-card stat-card" href="{% url 'atendimento' %}" style="text-decoration: none; display: block;">
+      <a class="glass-card stat-card u-block-link" href="{% url 'atendimento' %}">
         <div class="stat-header">
           <span class="stat-label">Atendimento</span>
         </div>
@@ -51,7 +50,7 @@
         <div class="stat-change positive">Registro e acompanhamento de atendimentos.</div>
       </a>
 
-      <a class="glass-card stat-card" href="{% url 'manejo' %}" style="text-decoration: none; display: block;">
+      <a class="glass-card stat-card u-block-link" href="{% url 'manejo' %}">
         <div class="stat-header">
           <span class="stat-label">Manejo de Fauna</span>
         </div>
@@ -59,7 +58,7 @@
         <div class="stat-change positive">Acesso Controle de Manejo de Fauna</div>
       </a>
 
-      <a class="glass-card stat-card" href="{% url 'flora' %}" style="text-decoration: none; display: block;">
+      <a class="glass-card stat-card u-block-link" href="{% url 'flora' %}">
         <div class="stat-header">
           <span class="stat-label">Flora</span>
         </div>

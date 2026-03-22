@@ -12,7 +12,7 @@
         </div>
 
         <!-- GRID DE CAMPOS -->
-        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-grid u-grid-2-equal">
             <div class="form-group-settings">
                 <label>ID</label>
                 <input type="text" id="view-id" value="{{ ocorrencia.id }}" disabled>
@@ -73,7 +73,7 @@
                 <div class="card-title">Ações</div>
             </div>
         </div>
-        <div class="btn-group" style="flex-direction: column;">
+        <div class="btn-group u-btn-group-column">
             <button class="btn btn-secondary" type="button" id="btn-view-edit">
                 Editar
             </button>
@@ -85,22 +85,22 @@
                 Cancelar
             </button>
         </div>
-        <div style="margin-top: 22px;">
-            <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+        <div class="u-mt-22">
+            <div class="u-meta-stack">
                 <div>
-                    <span style="color: var(--text-muted);">Criado em</span><br>
+                    <span class="u-text-muted">Criado em</span><br>
                     <span id="view-criado-em">—</span>
                 </div>
                 <div>
-                    <span style="color: var(--text-muted);">Criado por</span><br>
+                    <span class="u-text-muted">Criado por</span><br>
                     <span id="view-criado-por">—</span>
                 </div>
                 <div>
-                    <span style="color: var(--text-muted);">Modificado em</span><br>
+                    <span class="u-text-muted">Modificado em</span><br>
                     <span id="view-modificado-em">—</span>
                 </div>
                 <div>
-                    <span style="color: var(--text-muted);">Modificado por</span><br>
+                    <span class="u-text-muted">Modificado por</span><br>
                     <span id="view-modificado-por">—</span>
                 </div>
             </div>
@@ -109,7 +109,7 @@
 </div>
 
 <!-- BLOCO DE ANEXOS -->
-<section class="glass-card table-card" style="margin-top: 24px;">
+<section class="glass-card table-card u-mt-24">
     <div class="card-header">
         <div>
             <div class="card-title">Anexos</div>

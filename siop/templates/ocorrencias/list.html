@@ -35,14 +35,14 @@
 
                 <tbody>
                     {% for ocorrencia in page_obj %}
-                    <tr class="ocorrencia-row" data-id="{{ ocorrencia.id }}" style="cursor:pointer;">
+                    <tr class="ocorrencia-row u-pointer" data-id="{{ ocorrencia.id }}">
                         <td class="table-amount">{{ ocorrencia.id }}</td>
-                        <td style="text-align: center;">{{ ocorrencia.data_ocorrencia|localtime|date:"d/m/Y H:i" }}</td>
+                        <td class="u-text-center">{{ ocorrencia.data_ocorrencia|localtime|date:"d/m/Y H:i" }}</td>
                         <td>{{ ocorrencia.natureza }}</td>
                         <td>{{ ocorrencia.tipo }}</td>
                         <td>{{ ocorrencia.area }}</td>
                         <td>{{ ocorrencia.local }}</td>
-                        <td style="text-align: center;">
+                        <td class="u-text-center">
 
                             {% if ocorrencia.total_anexos|default:0 > 0 %}
                             Sim
@@ -51,7 +51,7 @@
                             {% endif %}
 
                         </td>
-                        <td style="text-align: center;">
+                        <td class="u-text-center">
 
                             {% if ocorrencia.status %}
                             <span class="status-badge completed">Finalizada</span>

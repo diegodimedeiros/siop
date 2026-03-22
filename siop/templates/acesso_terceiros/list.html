@@ -33,15 +33,15 @@
 
                 <tbody>
                     {% for acesso_terceiro in page_obj %}
-                    <tr class="acesso_terceiro-row" data-id="{{ acesso_terceiro.id }}" style="cursor:pointer;">
+                    <tr class="acesso_terceiro-row u-pointer" data-id="{{ acesso_terceiro.id }}">
                         <td class="table-amount">{{ acesso_terceiro.id }}</td>
-                        <td style="text-align: center;">{{ acesso_terceiro.entrada|localtime|date:"d/m/Y H:i" }}</td>
+                        <td class="u-text-center">{{ acesso_terceiro.entrada|localtime|date:"d/m/Y H:i" }}</td>
                         <td>{{ acesso_terceiro.empresa }}</td>
                         <td>{{ acesso_terceiro.nome }}</td>
-                        <td style="text-align: center;">{{ acesso_terceiro.documento }}</td>
-                        <td style="text-align: center;">{{ acesso_terceiro.p1 }}</td>
-                        <td style="text-align: center;">{{ acesso_terceiro.saida|localtime|date:"d/m/Y H:i" }}</td>
-                        <td style="text-align: center;">
+                        <td class="u-text-center">{{ acesso_terceiro.documento }}</td>
+                        <td class="u-text-center">{{ acesso_terceiro.p1 }}</td>
+                        <td class="u-text-center">{{ acesso_terceiro.saida|localtime|date:"d/m/Y H:i" }}</td>
+                        <td class="u-text-center">
                             {% if acesso_terceiro.saida %}
                             <span class="status-badge completed">Finalizada</span>
                             {% else %}

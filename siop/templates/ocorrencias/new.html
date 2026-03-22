@@ -14,7 +14,7 @@
     <!-- GRID DE CAMPOS -->
     <form id="ocorrencia-form" method="post" enctype="multipart/form-data" action="{% url 'ocorrencia_new' %}">
       {% csrf_token %}
-      <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="form-grid u-grid-2-equal">
         <div class="form-group-settings">
           <label for="natureza">Natureza</label>
           <select id="natureza" name="natureza" required>
@@ -88,7 +88,7 @@
       </div>
     </div>
 
-    <div class="btn-group" style="flex-direction: column;">
+    <div class="btn-group u-btn-group-column">
       <button class="btn btn-secondary" type="button" id="btn-salvar">
         Salvar
       </button>
@@ -97,29 +97,29 @@
       >Cancelar</button>
 
       {% if ocorrencia and not ocorrencia.status %}
-      <form method="post" action="" style="margin-top: 8px;">
+      <form method="post" action="" class="u-mt-8">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Finalizar ocorrência</button>
       </form>
       {% endif %}
     </div>
 
-    <div style="margin-top: 22px;">
-      <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+    <div class="u-mt-22">
+      <div class="u-meta-stack">
         <div>
-          <span style="color: var(--text-muted);">Criado em</span><br>
+          <span class="u-text-muted">Criado em</span><br>
           <span id="view-criado-em">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Criado por</span><br>
+          <span class="u-text-muted">Criado por</span><br>
           <span id="view-criado-por">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Modificado em</span><br>
+          <span class="u-text-muted">Modificado em</span><br>
           <span id="view-modificado-em">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Modificado por</span><br>
+          <span class="u-text-muted">Modificado por</span><br>
           <span id="view-modificado-por">—</span>
         </div>
       </div>

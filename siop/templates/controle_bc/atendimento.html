@@ -26,8 +26,7 @@
           <path d="M6.34 17.66l-1.41 1.41" />
           <path d="M19.07 4.93l-1.41 1.41" />
         </svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          style="display: none;">
+        <svg class="icon-moon icon-moon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       </button>
@@ -55,7 +54,7 @@
       <form id="atendimento-form" class="manejo-form" method="post" action="{% url 'atendimento' %}"
         enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-grid grid-cols-3 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Dados da Pessoa</label>
             <p>Informações principais da pessoa atendida.</p>
@@ -102,7 +101,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-3 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Contato</label>
             <p>Informações de contato da pessoa atendida.</p>
@@ -142,7 +141,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-3 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Dados do Atendimento</label>
             <p>Registro principal do atendimento realizado.</p>
@@ -206,7 +205,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-3 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Saúde</label>
             <p>Informações clínicas e de plano de saúde.</p>
@@ -257,7 +256,7 @@
         </div>
 
 
-        <div class="form-grid grid-cols-2 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Remoção e Encaminhamento</label>
             <p>Informações sobre transporte, destino e atendimento externo.</p>
@@ -313,7 +312,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-2 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width" id="acompanhante_title">
             <label>Acompanhante</label>
             <p>Dados do acompanhante quando houver.</p>
@@ -366,7 +365,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-2 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Testemunhas</label>
             <p>Preencha apenas as testemunhas necessárias.</p>
@@ -378,7 +377,7 @@
               <option value="true">Sim</option>
             </select>
           </div>
-          <div class="form-group-settings" id="add_testemunha_wrapper" hidden style="display:none;">
+          <div class="form-group-settings" id="add_testemunha_wrapper" hidden>
             <div class="btn-group">
               <button class="btn btn-secondary btn-font-default" type="button" id="add_testemunha_btn" aria-label="Adicionar testemunha">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"
@@ -389,8 +388,8 @@
               </button>
             </div>
           </div>
-          <div class="form-group-settings full-width" id="testemunhas_group_wrapper" hidden style="display:none;">
-            <div id="testemunhas_group" hidden style="display:none;">
+          <div class="form-group-settings full-width" id="testemunhas_group_wrapper" hidden>
+            <div id="testemunhas_group" hidden>
               {% for idx in "012" %}
               <div id="testemunha_bloco_{{ forloop.counter0 }}" class="testemunha-card border-radius-default" {% if forloop.counter0 > 0 %}hidden{% endif %}>
                 <div class="testemunha-card-header">
@@ -467,7 +466,7 @@
           </div>
         </div>
 
-        <div class="form-grid grid-cols-2 border-radius-default" style="padding: 20px; margin-bottom: 20px;">
+        <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <label>Anexos e Evidências</label>
             <p>Arquivos e informações complementares do atendimento.</p>
@@ -564,14 +563,13 @@
 </main>
 
 <div id="signature-modal" class="modal-overlay" hidden>
-  <div class="modal-card" style="width:min(96vw, 980px);">
+  <div class="modal-card u-modal-card-wide">
     <h2 class="modal-message">Assinatura do Atendido</h2>
     <p>Assine dentro da área abaixo.</p>
-    <div class="glass-card" style="padding:12px;">
-      <canvas id="assinatura_modal_canvas" width="920" height="340"
-        style="width:100%;height:auto;display:block;background:#fff;border:1px dashed var(--glass-border);border-radius:12px;touch-action:none;"></canvas>
+    <div class="glass-card u-signature-canvas-shell">
+      <canvas id="assinatura_modal_canvas" class="u-signature-canvas" width="920" height="340"></canvas>
     </div>
-    <div class="btn-group" style="justify-content:flex-end;margin-top:16px;gap:12px;">
+    <div class="btn-group u-btn-group-end u-mt-16">
       <button type="button" id="btn-assinatura-limpar" class="btn btn-danger btn-font-default">Limpar</button>
       <button type="button" id="btn-assinatura-cancelar" class="btn btn-danger btn-font-default">Cancelar</button>
       <button type="button" id="btn-assinatura-confirmar" class="btn btn-secondary btn-font-default">Confirmar</button>

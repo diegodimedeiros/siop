@@ -16,7 +16,7 @@
       <form id="edit-acesso-terceiros-form" method="post" enctype="multipart/form-data" action="">
         {% csrf_token %}     
 
-        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-grid u-grid-2-equal">
           <div class="form-group-settings">
             <label for="data-edit">Data/Hora de entrada</label>
             <input type="datetime-local" id="data-edit" name="data" required>
@@ -57,7 +57,7 @@
           <div class="form-group-settings full-width">
             <label for="anexos-edit">Adicionar anexos</label>
             <input type="file" id="anexos-edit" name="anexos" multiple>
-            <small style="color: var(--text-muted); margin-top: 6px;">
+            <small class="u-form-helper">
               Você pode enviar novos anexos (os antigos serão mantidos).
             </small>
           </div>
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="btn-group" style="flex-direction: column;">
+    <div class="btn-group u-btn-group-column">
       <button class="btn btn-secondary" type="button" id="btn-salvar-edit">
         Salvar
       </button>
@@ -89,22 +89,22 @@
       </button>
     </div>
 
-    <div style="margin-top: 22px;">
-      <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+    <div class="u-mt-22">
+      <div class="u-meta-stack">
         <div>
-          <span style="color: var(--text-muted);">Criado em</span><br>
+          <span class="u-text-muted">Criado em</span><br>
           <span id="edit-criado-em">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Criado por</span><br>
+          <span class="u-text-muted">Criado por</span><br>
           <span id="edit-criado-por">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Modificado em</span><br>
+          <span class="u-text-muted">Modificado em</span><br>
           <span id="edit-modificado-em">—</span>
         </div>
         <div>
-          <span style="color: var(--text-muted);">Modificado por</span><br>
+          <span class="u-text-muted">Modificado por</span><br>
           <span id="edit-modificado-por">—</span>
         </div>
       </div>

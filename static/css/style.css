@@ -3499,3 +3499,119 @@ select option {
 [data-theme="light"] .field-error-message {
     color: #b91c1c;
 }
+
+.u-hidden {
+    display: none !important;
+}
+
+.u-block-link {
+    display: block;
+    text-decoration: none;
+}
+
+.u-inline-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.u-grid-span-full {
+    grid-column: 1 / -1;
+}
+
+.u-grid-2-equal {
+    grid-template-columns: 1fr 1fr;
+}
+
+.u-grid-4-equal {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.u-btn-group-column {
+    flex-direction: column;
+}
+
+.u-btn-group-end {
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.u-mt-8 {
+    margin-top: 8px;
+}
+
+.u-mt-16 {
+    margin-top: 16px;
+}
+
+.u-mt-22 {
+    margin-top: 22px;
+}
+
+.u-mt-24 {
+    margin-top: 24px;
+}
+
+.u-text-center {
+    text-align: center;
+}
+
+.u-pointer {
+    cursor: pointer;
+}
+
+.u-text-muted {
+    color: var(--text-muted);
+}
+
+.u-form-helper {
+    margin-top: 6px;
+    color: var(--text-muted);
+}
+
+.u-meta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 14px;
+}
+
+.u-panel-section {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.u-modal-card-wide {
+    width: min(96vw, 980px);
+}
+
+.u-signature-canvas-shell {
+    padding: 12px;
+}
+
+.u-signature-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px dashed var(--glass-border);
+    border-radius: 12px;
+    touch-action: none;
+}
+
+.u-login-error {
+    color: var(--danger);
+    font-size: 14px;
+}
+
+.u-nav-link-spaced {
+    margin-top: 8px;
+}
+
+.u-nav-link-btn-full {
+    width: 100%;
+    text-align: left;
+}

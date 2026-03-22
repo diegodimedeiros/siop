@@ -169,6 +169,7 @@ Observacao:
 - `docs/backend-padrao.md` e a fonte oficial do padrao de implementacao do backend.
 - `docs/js-arquitetura.md` concentra o roadmap e as convencoes da arquitetura frontend.
 - `docs/frontend-templates.md` concentra o padrao da camada de templates e sua integracao com backend e JS.
+- `core.utils` e a fonte preferencial para catalogos, formatadores, exports e helpers compartilhados; `siop.utils` permanece apenas como camada de compatibilidade temporaria.
 
 ## Ambiente e Qualidade
 

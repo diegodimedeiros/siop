@@ -387,6 +387,7 @@ class ControleAtendimento(BaseModel):
         if not self.data_atendimento: errors["data_atendimento"] = "A data e hora do atendimento são obrigatórias."
         if not self.tipo_ocorrencia: errors["tipo_ocorrencia"] = "O tipo de ocorrência é obrigatório."
         if not self.descricao: errors["descricao"] = "A descrição do atendimento é obrigatória."
+        if not self.responsavel_atendimento: errors["responsavel_atendimento"] = "O responsável pelo atendimento é obrigatório."
         if self.possui_acompanhante and not self.acompanhante_pessoa_id: errors["acompanhante_pessoa"] = "Informe o acompanhante."
         if self.houve_remocao and not self.transporte: errors["transporte"] = "Informe o transporte quando houver remoção."
         if self.doenca_preexistente and not self.descricao_doenca: errors["descricao_doenca"] = "Informe a descrição da doença preexistente."

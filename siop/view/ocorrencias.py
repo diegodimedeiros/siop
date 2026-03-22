@@ -23,18 +23,7 @@ from core.api import (
     parse_limit_offset,
 )
 from core.services import ServiceError
-from ..models import Ocorrencia, Anexo
-from ..services import create_ocorrencia, edit_ocorrencia
-from siop.utils import (
-    _anexos_total,
-    _bool_ptbr,
-    _export_generic_csv,
-    _export_generic_excel,
-    _export_generic_pdf,
-    _fmt_dt,
-    _status_ptbr,
-    _user_display,
-    build_numbered_canvas_class,
+from core.utils.catalogos import (
     catalogo_areas_data,
     catalogo_encaminhamentos_data,
     catalogo_locais_por_area_data,
@@ -46,10 +35,27 @@ from siop.utils import (
     catalogo_tipos_pessoa_data,
     catalogo_tipos_por_natureza_data,
     catalogo_transportes_data,
+)
+from core.utils.exports import (
+    export_generic_csv as _export_generic_csv,
+    export_generic_excel as _export_generic_excel,
+    export_generic_pdf as _export_generic_pdf,
+)
+from core.utils.exports.pdf_export import (
+    build_numbered_canvas_class,
     draw_pdf_label_value,
     draw_pdf_page_chrome,
     wrap_pdf_text_lines,
 )
+from core.utils.formatters import (
+    bool_ptbr as _bool_ptbr,
+    fmt_dt as _fmt_dt,
+    status_ptbr as _status_ptbr,
+    user_display as _user_display,
+)
+from core.utils.helpers import anexos_total as _anexos_total
+from ..models import Ocorrencia, Anexo
+from ..services import create_ocorrencia, edit_ocorrencia
 logger = logging.getLogger(__name__)
 
 OCORRENCIAS_EXPORT_HEADERS = [

@@ -1,3 +1,10 @@
+"""Compatibility re-export layer for legacy imports.
+
+Prefer importing shared infrastructure directly from ``core.utils`` in new
+code. This module remains only to keep older domain views stable while we
+finish converging imports.
+"""
+
 from core.utils.catalogos import (
     catalogo_areas_data,
     catalogo_encaminhamentos_data,

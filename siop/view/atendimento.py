@@ -5,9 +5,8 @@ from django.shortcuts import redirect, render
 
 from core.api import ApiStatus, api_error, api_success
 from core.services import ServiceError
-from core.utils.catalogos import carregar_catalogo_json
-from siop.services import create_atendimento
-from siop.utils import (
+from core.utils.catalogos import (
+    carregar_catalogo_json,
     catalogo_areas_data,
     catalogo_encaminhamentos_data,
     catalogo_locais_por_area_data,
@@ -19,6 +18,7 @@ from siop.utils import (
     catalogo_transportes_data,
     catalogo_ufs_data,
 )
+from siop.services import create_atendimento
 
 logger = logging.getLogger(__name__)
 

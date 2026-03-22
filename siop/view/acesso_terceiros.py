@@ -14,20 +14,24 @@ from django.views.decorators.http import require_GET
 
 from core.api import ApiStatus, api_error, api_success, parse_json_body, parse_limit_offset
 from core.services import ServiceError
-from ..models import AcessoTerceiros, Anexo
-from ..services import create_acesso_terceiros, edit_acesso_terceiros
-from siop.utils import (
-    _anexos_total,
-    _export_generic_csv,
-    _export_generic_excel,
-    _export_generic_pdf,
-    _fmt_dt,
-    _user_display,
+from core.utils.exports import (
+    export_generic_csv as _export_generic_csv,
+    export_generic_excel as _export_generic_excel,
+    export_generic_pdf as _export_generic_pdf,
+)
+from core.utils.exports.pdf_export import (
     build_numbered_canvas_class,
     draw_pdf_label_value,
     draw_pdf_page_chrome,
     wrap_pdf_text_lines,
 )
+from core.utils.formatters import (
+    fmt_dt as _fmt_dt,
+    user_display as _user_display,
+)
+from core.utils.helpers import anexos_total as _anexos_total
+from ..models import AcessoTerceiros, Anexo
+from ..services import create_acesso_terceiros, edit_acesso_terceiros
 
 logger = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@
 {% block nav_controlebc_active %}active{% endblock %}
 
 {% block content %}
-<main class="main-content">
+<main class="main-content module-page">
   <nav class="navbar">
     <h1 class="page-title">Formulário de Atendimento</h1>
     <div class="navbar-right">
@@ -84,7 +84,7 @@
           </div>
           <div class="form-group-settings">
             <label for="pessoa_sexo">Sexo</label>
-            <select id="pessoa_sexo" name="pessoa_sexo">
+            <select id="pessoa_sexo" name="pessoa_sexo" required>
               <option value="">Selecione...</option>
               {% for item in sexos %}
               <option value="{{ item }}">{{ item }}</option>
@@ -176,7 +176,7 @@
           </div>
           <div class="form-group-settings">
             <label for="responsavel_atendimento">Responsável pelo Atendimento</label>
-            <select id="responsavel_atendimento" name="responsavel_atendimento">
+            <select id="responsavel_atendimento" name="responsavel_atendimento" required>
               <option value="">Selecione...</option>
               {% for item in responsaveis_atendimento %}
               <option value="{{ item.value }}">{{ item.label }}</option>

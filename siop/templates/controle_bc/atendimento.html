@@ -56,7 +56,7 @@
         {% csrf_token %}
         <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Dados da Pessoa</label>
+            <p class="form-label">Dados da Pessoa</p>
             <p>Informações principais da pessoa atendida.</p>
           </div>
 
@@ -103,7 +103,7 @@
 
         <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Contato</label>
+            <p class="form-label">Contato</p>
             <p>Informações de contato da pessoa atendida.</p>
           </div>
           <div class="form-group-settings span-2">
@@ -143,7 +143,7 @@
 
         <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Dados do Atendimento</label>
+            <p class="form-label">Dados do Atendimento</p>
             <p>Registro principal do atendimento realizado.</p>
           </div>
           <div class="form-group-settings">
@@ -207,7 +207,7 @@
 
         <div class="form-grid grid-cols-3 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Saúde</label>
+            <p class="form-label">Saúde</p>
             <p>Informações clínicas e de plano de saúde.</p>
           </div>
           <div class="form-group-settings">
@@ -258,7 +258,7 @@
 
         <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Remoção e Encaminhamento</label>
+            <p class="form-label">Remoção e Encaminhamento</p>
             <p>Informações sobre transporte, destino e atendimento externo.</p>
           </div>
           <div class="form-group-settings">
@@ -314,7 +314,7 @@
 
         <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width" id="acompanhante_title">
-            <label>Acompanhante</label>
+            <p class="form-label">Acompanhante</p>
             <p>Dados do acompanhante quando houver.</p>
           </div>
           <div class="form-group-settings acompanhante-group" id="possui_acompanhante_group">
@@ -367,7 +367,7 @@
 
         <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Testemunhas</label>
+            <p class="form-label">Testemunhas</p>
             <p>Preencha apenas as testemunhas necessárias.</p>
           </div>
           <div class="form-group-settings">
@@ -393,7 +393,7 @@
               {% for idx in "012" %}
               <div id="testemunha_bloco_{{ forloop.counter0 }}" class="testemunha-card border-radius-default" {% if forloop.counter0 > 0 %}hidden{% endif %}>
                 <div class="testemunha-card-header">
-                  <label class="testemunha-card-title">Testemunha {{ forloop.counter }}</label>
+                  <span class="testemunha-card-title">Testemunha {{ forloop.counter }}</span>
                   {% if forloop.counter0 > 0 %}
                   <div class="btn-group">
                     <button class="btn btn-danger remove_testemunha_btn btn-font-default" type="button" data-target="testemunha_bloco_{{ forloop.counter0 }}">Remover</button>
@@ -468,11 +468,11 @@
 
         <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
-            <label>Anexos e Evidências</label>
+            <p class="form-label">Anexos e Evidências</p>
             <p>Arquivos e informações complementares do atendimento.</p>
           </div>
           <div class="form-group-settings full-width anexos-unificados-group">
-            <label for="fotos">Fotos e Lista de Imagens do Atendimento</label>
+            <p class="form-label">Fotos e Lista de Imagens do Atendimento</p>
             <div class="glass-card anexos-unificados-card">
               <div class="upload-panel-controls">
                 <div class="upload-panel-actions">
@@ -516,7 +516,7 @@
           </div>
 
           <div class="form-group-settings full-width">
-            <label for="geolocalizacao_atendimento">Geolocalização do Atendimento</label>
+            <p class="form-label">Geolocalização do Atendimento</p>
             <input type="hidden" id="geo_latitude" name="geo_latitude">
             <input type="hidden" id="geo_longitude" name="geo_longitude">
             <div class="glass-card geolocation-panel-card">
@@ -530,7 +530,7 @@
           </div>
 
           <div class="form-group-settings full-width">
-            <label for="assinatura_atendido">Assinatura do Atendido</label>
+            <p class="form-label">Assinatura do Atendido</p>
             <input type="hidden" id="assinatura_atendido" name="assinatura_atendido">
             <div class="glass-card upload-panel-card">
               <div class="upload-panel-controls">
@@ -581,7 +581,7 @@
 {% block extra_js %}
 {{ block.super }}
 {{ locais_por_area|json_script:"locais-por-area" }}
-<script src="{% static 'js/controlebc-atendimento.js' %}?v=3"></script>
+<script src="{% static 'js/controlebc-atendimento.js' %}?v=4"></script>
 <script>
   (function () {
     const testemunhaSelect = document.getElementById("testemunha");

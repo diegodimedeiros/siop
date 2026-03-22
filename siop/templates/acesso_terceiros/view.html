@@ -14,49 +14,49 @@
         <!-- GRID DE CAMPOS -->
         <div class="form-grid u-grid-2-equal">
             <div class="form-group-settings">
-                <label>ID</label>
+                <label for="view-id">ID</label>
                 <input type="text" id="view-id" value="{{ acesso_terceiro.id }}" disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Data/Hora de entrada</label>
+                <label for="view-data">Data/Hora de entrada</label>
                 <input type="text" id="view-data" value="{{ acesso_terceiro.entrada|localtime|date:'d/m/Y H:i' }}"
                     disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Empresa</label>
+                <label for="view-local">Empresa</label>
                 <input type="text" id="view-local" value="{{ acesso_terceiro.empresa }}" disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Nome completo</label>
+                <label for="view-tipo">Nome completo</label>
                 <input type="text" id="view-tipo" value="{{ acesso_terceiro.nome }}" disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Documento</label>
+                <label for="view-area">Documento</label>
                 <input type="text" id="view-area" value="{{ acesso_terceiro.documento }}" disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>P1</label>
+                <label for="view-pessoa">P1</label>
                 <input type="text" id="view-pessoa" value="{{ acesso_terceiro.p1 }}" disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Data/Hora de saída</label>
+                <label for="view-natureza">Data/Hora de saída</label>
                 <input type="text" id="view-natureza" value="{{ acesso_terceiro.saida|localtime|date:'d/m/Y H:i' }}"
                     disabled>
             </div>
 
             <div class="form-group-settings">
-                <label>Placa do veículo</label>
+                <label for="view-cftv">Placa do veículo</label>
                 <input type="text" id="view-cftv" value="{{ acesso_terceiro.placa_veiculo }}" disabled>
             </div>
 
             <div class="form-group-settings full-width">
-                <label>Descrição</label>
+                <label for="view-descricao">Descrição</label>
                 <textarea id="view-descricao" disabled>{{ acesso_terceiro.descricao }}</textarea>
             </div>
             

@@ -83,9 +83,6 @@ Capacidades previstas no projeto:
 - geolocalização;
 - anexos.
 
-Observação:
-Parte dessa funcionalidade aparenta estar em transição ou refatoração, pois a view e o modelo atual não estão totalmente alinhados.
-
 ### Manejo
 
 Módulo voltado ao registro de manejo de fauna.
@@ -188,16 +185,11 @@ Este não parece ser um site público. O perfil observado é de uma aplicação 
 Pontos positivos:
 
 - domínio relativamente bem modelado;
-- separação parcial entre views, services e utils;
-- contrato JSON padronizado para parte da API;
+- separação clara entre views, services e utils compartilhados;
+- contrato JSON padronizado na camada principal da API;
 - suporte a exportação e rastreabilidade de arquivos;
-- smoke tests de contrato backend já iniciados;
+- smoke tests de contrato backend ativos;
 - configuracao sensivel movida para ambiente.
-
-Pontos de atenção:
-
-- o módulo de atendimento aparenta inconsistência entre view e model;
-- parte da organização entre `core.utils` e `siop.utils` está redundante.
 
 ## Resumo
 

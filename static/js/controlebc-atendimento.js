@@ -26,6 +26,13 @@
   const openModal = getShared('modal.openModal', shared.modal?.openModal);
   const closeModal = getShared('modal.closeModal', shared.modal?.closeModal);
   const setLoading = getShared('feedback.setLoading', shared.feedback?.setLoading);
+  const GEO_SUBMIT_TIMEOUT_MS = 2500;
+
+  function wait(ms) {
+    return new Promise((resolve) => {
+      window.setTimeout(resolve, ms);
+    });
+  }
 
   function initControleBCAtendimentoForm() {
     const form = document.getElementById('atendimento-form');
@@ -86,6 +93,7 @@
     const listaFotosAtendimentoVazia = document.getElementById('lista_fotos_atendimento_vazia');
     const fotosStatus = document.getElementById('quantidade_fotos_atendimento');
     const submitButton = document.querySelector('button[type="submit"][form="atendimento-form"]');
+    const nativeSubmit = HTMLFormElement.prototype.submit;
 
     function updateLocais() {
       if (!area || !local) return;
@@ -390,19 +398,25 @@
       }, 0);
     });
 
-    let isSubmittingWithGeo = false;
+    let isPreparingSubmitWithGeo = false;
     form.addEventListener('submit', async (event) => {
-      if (isSubmittingWithGeo) return;
+      if (isPreparingSubmitWithGeo) return;
       if (!form.reportValidity()) return;
 
       event.preventDefault();
-      isSubmittingWithGeo = true;
+      isPreparingSubmitWithGeo = true;
       setLoading?.(submitButton, true, { label: 'Salvando...' });
 
       try {
-        await captureGeolocationBeforeSubmit();
+        await Promise.race([
+          captureGeolocationBeforeSubmit(),
+          wait(GEO_SUBMIT_TIMEOUT_MS),
+        ]);
+        nativeSubmit.call(form);
+      } catch (error) {
+        console.error('Erro ao preparar envio do atendimento.', error);
       } finally {
-        form.requestSubmit();
+        isPreparingSubmitWithGeo = false;
       }
     });
 

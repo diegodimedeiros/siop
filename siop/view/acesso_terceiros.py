@@ -610,7 +610,7 @@ def acesso_terceiros_new(request):
 def acesso_terceiros_edit(request, pk):
     acesso = get_object_or_404(AcessoTerceiros, pk=pk)
 
-    if request.method != "POST":
+    if request.method not in {"POST", "PATCH"}:
         return api_error(
             code="method_not_allowed",
             message="Método não permitido.",

@@ -25,6 +25,7 @@
   const requestJSON = getShared('http.requestJSON', shared.http?.requestJSON);
   const setLoading = getShared('feedback.setLoading', shared.feedback?.setLoading);
   const runWithLoading = getShared('feedback.runWithLoading', shared.feedback?.runWithLoading);
+  const showSuccess = getShared('feedback.showSuccess', shared.feedback?.showSuccess);
   const showRequestError = getShared('feedback.showRequestError', shared.feedback?.showRequestError);
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -182,7 +183,10 @@
     }
 
     function showSuccessModal(idValue) {
-      if (!modalSucesso) return;
+      if (!modalSucesso) {
+        showSuccess?.(idValue ? `Manejo cadastrado com sucesso! ID: ${idValue}.` : 'Manejo cadastrado com sucesso!');
+        return;
+      }
       setModalMessage(modalSucesso, 'Manejo cadastrado com sucesso!');
       if (modalId) {
         modalId.textContent = idValue ? String(idValue) : '';

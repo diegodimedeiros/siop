@@ -159,6 +159,7 @@ Esses catálogos são carregados por utilitários e usados para popular formulá
 
 - [Contrato da API](./docs/api.md)
 - [Arquitetura JavaScript](./docs/js-arquitetura.md)
+- [Templates Frontend](./docs/frontend-templates.md)
 - [Padrão Backend](./docs/backend-padrao.md)
 - [Banco de Dados](./docs/banco-de-dados.md)
 - [Checklist de Testes](./docs/testes-fluxos.md)
@@ -167,6 +168,7 @@ Esses catálogos são carregados por utilitários e usados para popular formulá
 Observacao:
 - `docs/backend-padrao.md` e a fonte oficial do padrao de implementacao do backend.
 - `docs/js-arquitetura.md` concentra o roadmap e as convencoes da arquitetura frontend.
+- `docs/frontend-templates.md` concentra o padrao da camada de templates e sua integracao com backend e JS.
 
 ## Ambiente e Qualidade
 

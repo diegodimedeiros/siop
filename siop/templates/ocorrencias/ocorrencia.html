@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block nav_ocorrencia_active %}active{% endblock %}
 
 {% block content %}
@@ -76,13 +77,13 @@
       {% include "ocorrencias/export.html" %}
     </div>
   </div>
-  <div id="modal-sucesso" class="modal-overlay" style="display:none;">
-    <div class="modal-card">
-      <h2 class="modal-message">Ocorrência cadastrada com sucesso!</h2>
-      <p>ID da ocorrência: <span id="modal-id"></span></p>
-      <button class="btn btn-primary" type="button" data-modal-close="#modal-sucesso">
-        OK
-      </button>
-    </div>
-  </div>
-  {% endblock %}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/ocorrencias-core.js' %}"></script>
+  <script src="{% static 'js/ocorrencias-feedback.js' %}"></script>
+  <script src="{% static 'js/ocorrencias-search-list.js' %}"></script>
+  <script src="{% static 'js/ocorrencias-view-edit.js' %}"></script>
+  <script src="{% static 'js/ocorrencias-create.js' %}"></script>
+  <script src="{% static 'js/ocorrencias-export.js' %}"></script>
+{% endblock %}

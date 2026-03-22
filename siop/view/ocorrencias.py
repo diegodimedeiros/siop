@@ -52,6 +52,21 @@ from siop.utils import (
 )
 logger = logging.getLogger(__name__)
 
+OCORRENCIAS_EXPORT_HEADERS = [
+    "ID", "Data/Hora", "Natureza", "Tipo", "Area", "Local", "Pessoa", "CFTV",
+    "Bombeiro Civil", "Status", "Anexos", "Descricao", "Criado em", "Criado por", "Modificado em", "Modificado por",
+]
+
+OCORRENCIAS_EXPORT_PDF_HEADERS = [
+    "ID", "Data/Hora", "Natureza", "Tipo", "Area", "Local", "Pessoa", "CFTV",
+    "Bombeiro Civil", "Status", "Anexos", "Criado em", "Criado por", "Modificado em", "Modificado por",
+]
+
+OCORRENCIAS_EXPORT_BASE_COL_WIDTHS = [
+    0.26 * 72, 0.95 * 72, 0.62 * 72, 0.85 * 72, 0.8 * 72, 1.2 * 72, 0.8 * 72, 0.5 * 72,
+    0.75 * 72, 0.54 * 72, 0.45 * 72, 0.95 * 72, 0.95 * 72, 0.95 * 72, 0.95 * 72,
+]
+
 
 def _extract_request_payload(request):
     json_data, json_error = parse_json_body(request)
@@ -82,12 +97,8 @@ def _unexpected_error_response(log_message, **extra):
     )
 
 
-def export_ocorrencias_pdf(request, queryset):
-    headers = [
-        "ID", "Data/Hora", "Natureza", "Tipo", "Area", "Local", "Pessoa", "CFTV",
-        "Bombeiro Civil", "Status", "Anexos", "Criado em", "Criado por", "Modificado em", "Modificado por",
-    ]
-    row_getters = [
+def _get_ocorrencias_export_row_getters(include_description=False):
+    getters = [
         lambda o: o.id,
         lambda o: _fmt_dt(o.data_ocorrencia),
         lambda o: o.natureza or "",
@@ -99,51 +110,35 @@ def export_ocorrencias_pdf(request, queryset):
         lambda o: _bool_ptbr(o.bombeiro_civil),
         lambda o: _status_ptbr(o.status),
         _anexos_total,
-        lambda o: _fmt_dt(o.criado_em),
-        lambda o: _user_display(getattr(o, "criado_por", None)),
-        lambda o: _fmt_dt(o.modificado_em),
-        lambda o: _user_display(getattr(o, "modificado_por", None)),
     ]
-    base_col_widths = [
-        0.26 * 72, 0.95 * 72, 0.62 * 72, 0.85 * 72, 0.8 * 72, 1.2 * 72, 0.8 * 72, 0.5 * 72,
-        0.75 * 72, 0.54 * 72, 0.45 * 72, 0.95 * 72, 0.95 * 72, 0.95 * 72, 0.95 * 72,
-    ]
+    if include_description:
+        getters.append(lambda o: o.descricao or "")
+    getters.extend(
+        [
+            lambda o: _fmt_dt(o.criado_em),
+            lambda o: _user_display(getattr(o, "criado_por", None)),
+            lambda o: _fmt_dt(o.modificado_em),
+            lambda o: _user_display(getattr(o, "modificado_por", None)),
+        ]
+    )
+    return getters
+
+
+def export_ocorrencias_pdf(request, queryset):
     return _export_generic_pdf(
         request,
         queryset,
         filename_prefix="ocorrencias",
         report_title="Relatorio de Ocorrencias",
         report_subject="Ocorrencias",
-        headers=headers,
-        row_getters=row_getters,
-        base_col_widths=base_col_widths,
+        headers=OCORRENCIAS_EXPORT_PDF_HEADERS,
+        row_getters=_get_ocorrencias_export_row_getters(),
+        base_col_widths=OCORRENCIAS_EXPORT_BASE_COL_WIDTHS,
         nowrap_indices={5},
     )
 
 
 def export_ocorrencias_excel(request, queryset):
-    headers = [
-        "ID", "Data/Hora", "Natureza", "Tipo", "Area", "Local", "Pessoa", "CFTV",
-        "Bombeiro Civil", "Status", "Anexos", "Descricao", "Criado em", "Criado por", "Modificado em", "Modificado por",
-    ]
-    row_getters = [
-        lambda o: o.id,
-        lambda o: _fmt_dt(o.data_ocorrencia),
-        lambda o: o.natureza or "",
-        lambda o: o.tipo or "",
-        lambda o: o.area or "",
-        lambda o: o.local or "",
-        lambda o: o.tipo_pessoa or "",
-        lambda o: _bool_ptbr(o.cftv),
-        lambda o: _bool_ptbr(o.bombeiro_civil),
-        lambda o: _status_ptbr(o.status),
-        _anexos_total,
-        lambda o: o.descricao or "",
-        lambda o: _fmt_dt(o.criado_em),
-        lambda o: _user_display(getattr(o, "criado_por", None)),
-        lambda o: _fmt_dt(o.modificado_em),
-        lambda o: _user_display(getattr(o, "modificado_por", None)),
-    ]
     return _export_generic_excel(
         request,
         queryset,
@@ -151,40 +146,18 @@ def export_ocorrencias_excel(request, queryset):
         sheet_title="Ocorrencias",
         document_title="Relatorio de Ocorrencias",
         document_subject="Ocorrencias",
-        headers=headers,
-        row_getters=row_getters,
+        headers=OCORRENCIAS_EXPORT_HEADERS,
+        row_getters=_get_ocorrencias_export_row_getters(include_description=True),
     )
 
 
 def export_ocorrencias_csv(request, queryset):
-    headers = [
-        "ID", "Data/Hora", "Natureza", "Tipo", "Area", "Local", "Pessoa", "CFTV",
-        "Bombeiro Civil", "Status", "Anexos", "Descricao", "Criado em", "Criado por", "Modificado em", "Modificado por",
-    ]
-    row_getters = [
-        lambda o: o.id,
-        lambda o: _fmt_dt(o.data_ocorrencia),
-        lambda o: o.natureza or "",
-        lambda o: o.tipo or "",
-        lambda o: o.area or "",
-        lambda o: o.local or "",
-        lambda o: o.tipo_pessoa or "",
-        lambda o: _bool_ptbr(o.cftv),
-        lambda o: _bool_ptbr(o.bombeiro_civil),
-        lambda o: _status_ptbr(o.status),
-        _anexos_total,
-        lambda o: o.descricao or "",
-        lambda o: _fmt_dt(o.criado_em),
-        lambda o: _user_display(getattr(o, "criado_por", None)),
-        lambda o: _fmt_dt(o.modificado_em),
-        lambda o: _user_display(getattr(o, "modificado_por", None)),
-    ]
     return _export_generic_csv(
         request,
         queryset,
         filename_prefix="ocorrencias",
-        headers=headers,
-        row_getters=row_getters,
+        headers=OCORRENCIAS_EXPORT_HEADERS,
+        row_getters=_get_ocorrencias_export_row_getters(include_description=True),
     )
 
 
@@ -209,7 +182,7 @@ def serialize_anexo(anexo):
     }
 
 
-def serialize_ocorrencia_list_item(ocorrencia):
+def _serialize_ocorrencia_base_fields(ocorrencia):
     return {
         "id": ocorrencia.id,
         "natureza": ocorrencia.natureza,
@@ -219,6 +192,21 @@ def serialize_ocorrencia_list_item(ocorrencia):
         "pessoa": ocorrencia.tipo_pessoa,
         "data": _format_datetime(ocorrencia.data_ocorrencia),
         "status": ocorrencia.status,
+    }
+
+
+def _serialize_ocorrencia_audit_fields(ocorrencia):
+    return {
+        "criado_em": _format_datetime(ocorrencia.criado_em),
+        "criado_por": _display_user(ocorrencia.criado_por),
+        "modificado_em": _format_datetime(ocorrencia.modificado_em),
+        "modificado_por": _display_user(ocorrencia.modificado_por),
+    }
+
+
+def serialize_ocorrencia_list_item(ocorrencia):
+    return {
+        **_serialize_ocorrencia_base_fields(ocorrencia),
         "tem_anexo": ocorrencia.total_anexos > 0,
         "total_anexos": ocorrencia.total_anexos,
     }
@@ -227,24 +215,18 @@ def serialize_ocorrencia_list_item(ocorrencia):
 def serialize_ocorrencia_detail(ocorrencia):
     anexos = [serialize_anexo(a) for a in ocorrencia.anexos.all()]
     return {
-        "id": ocorrencia.id,
-        "data": _format_datetime(ocorrencia.data_ocorrencia),
-        "natureza": ocorrencia.natureza,
-        "tipo": ocorrencia.tipo,
-        "area": ocorrencia.area,
-        "local": ocorrencia.local,
-        "pessoa": ocorrencia.tipo_pessoa,
+        **_serialize_ocorrencia_base_fields(ocorrencia),
         "descricao": ocorrencia.descricao,
         "cftv": ocorrencia.cftv,
         "bombeiro_civil": ocorrencia.bombeiro_civil,
-        "status": ocorrencia.status,
         "anexos": anexos,
         "anexos_total": len(anexos),
-        "criado_em": _format_datetime(ocorrencia.criado_em),
-        "criado_por": _display_user(ocorrencia.criado_por),
-        "modificado_em": _format_datetime(ocorrencia.modificado_em),
-        "modificado_por": _display_user(ocorrencia.modificado_por),
+        **_serialize_ocorrencia_audit_fields(ocorrencia),
     }
+
+
+def _build_ocorrencias_base_qs():
+    return Ocorrencia.objects.annotate(total_anexos=Count("anexos"))
 
 
 def _parse_date_term(term):
@@ -384,6 +366,42 @@ def has_ocorrencia_export_filters(params):
         "q",
     )
     return any((params.get(key) or "").strip() for key in filter_keys)
+
+
+def _normalize_ocorrencia_search_params(request):
+    query = request.GET.get("q", "")
+    scope = request.GET.get("scope", "default")
+    sort_field = request.GET.get("sort", "")
+    sort_dir = request.GET.get("dir", "desc")
+    if scope not in ("default", "descricao"):
+        scope = "default"
+    return query, scope, sort_field, sort_dir
+
+
+def _build_ocorrencia_filtered_qs(request):
+    query, scope, sort_field, sort_dir = _normalize_ocorrencia_search_params(request)
+    queryset = _build_ocorrencias_base_qs()
+    queryset = apply_ocorrencia_export_filters(queryset, request.GET)
+    queryset = apply_ocorrencia_search(queryset, query, scope)
+    queryset, sort_field, sort_dir = apply_ocorrencia_ordering(queryset, sort_field, sort_dir)
+    return queryset, query, scope, sort_field, sort_dir
+
+
+def _build_ocorrencia_page_context(request):
+    queryset, query, scope, sort_field, sort_dir = _build_ocorrencia_filtered_qs(request)
+    paginator = Paginator(queryset, 20)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    return {
+        "page_obj": page_obj,
+        "q": query,
+        "scope": scope,
+        "sort": sort_field,
+        "dir": sort_dir,
+    }
+
+
+def _render_ocorrencia_page(request, template_name="ocorrencias/ocorrencia.html"):
+    return render(request, template_name, _build_ocorrencia_page_context(request))
 
 
 # ==============================
@@ -539,26 +557,7 @@ def home_view(request):
 
 @login_required
 def ocorrencia(request):
-    query = request.GET.get("q", "")
-    scope = request.GET.get("scope", "default")
-    sort_field = request.GET.get("sort", "")
-    sort_dir = request.GET.get("dir", "desc")
-    if scope not in ("default", "descricao"):
-        scope = "default"
-    qs = Ocorrencia.objects.annotate(total_anexos=Count("anexos"))
-    qs = apply_ocorrencia_export_filters(qs, request.GET)
-    qs = apply_ocorrencia_search(qs, query, scope)
-    qs, sort_field, sort_dir = apply_ocorrencia_ordering(qs, sort_field, sort_dir)
-
-    paginator = Paginator(qs, 20)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return render(
-        request,
-        "ocorrencias/ocorrencia.html",
-        {"page_obj": page_obj, "q": query, "scope": scope, "sort": sort_field, "dir": sort_dir},
-    )
+    return _render_ocorrencia_page(request)
 
 
 @require_GET
@@ -567,19 +566,7 @@ def ocorrencia_list(request):
     """
     Retorna JSON (corrigido: return não pode ficar dentro do for)
     """
-    query = request.GET.get("q", "")
-    scope = request.GET.get("scope", "default")
-    sort_field = request.GET.get("sort", "")
-    sort_dir = request.GET.get("dir", "desc")
-    if scope not in ("default", "descricao"):
-        scope = "default"
-    ocorrencias = (
-        Ocorrencia.objects
-        .annotate(total_anexos=Count("anexos"))
-    )
-    ocorrencias = apply_ocorrencia_export_filters(ocorrencias, request.GET)
-    ocorrencias = apply_ocorrencia_search(ocorrencias, query, scope)
-    ocorrencias, _, _ = apply_ocorrencia_ordering(ocorrencias, sort_field, sort_dir)
+    ocorrencias, _, _, _, _ = _build_ocorrencia_filtered_qs(request)
 
     limit, offset, pagination_error = parse_limit_offset(request.GET, default_limit=None, max_limit=500)
     if pagination_error:
@@ -618,26 +605,7 @@ def ocorrencia_list_partial(request):
     Retorna o HTML do include "ocorrencias/list.html"
     (pra atualizar a aba Listar via fetch sem dar F5)
     """
-    query = request.GET.get("q", "")
-    scope = request.GET.get("scope", "default")
-    sort_field = request.GET.get("sort", "")
-    sort_dir = request.GET.get("dir", "desc")
-    if scope not in ("default", "descricao"):
-        scope = "default"
-    qs = Ocorrencia.objects.annotate(total_anexos=Count("anexos"))
-    qs = apply_ocorrencia_export_filters(qs, request.GET)
-    qs = apply_ocorrencia_search(qs, query, scope)
-    qs, sort_field, sort_dir = apply_ocorrencia_ordering(qs, sort_field, sort_dir)
-
-    paginator = Paginator(qs, 20)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return render(
-        request,
-        "ocorrencias/list.html",
-        {"page_obj": page_obj, "q": query, "scope": scope, "sort": sort_field, "dir": sort_dir},
-    )
+    return _render_ocorrencia_page(request, template_name="ocorrencias/list.html")
 
 
 @require_GET
@@ -648,18 +616,7 @@ def ocorrencia_export(request, formato):
         params = urlencode({"export_error": "Aplique ao menos um filtro para exportar os registros."})
         return redirect(f"{reverse('ocorrencia')}?{params}")
 
-    qs = Ocorrencia.objects.annotate(total_anexos=Count("anexos"))
-    qs = apply_ocorrencia_export_filters(qs, request.GET)
-
-    query = request.GET.get("q", "")
-    scope = request.GET.get("scope", "default")
-    if scope not in ("default", "descricao"):
-        scope = "default"
-    qs = apply_ocorrencia_search(qs, query, scope)
-
-    sort_field = request.GET.get("sort", "")
-    sort_dir = request.GET.get("dir", "desc")
-    qs, _, _ = apply_ocorrencia_ordering(qs, sort_field, sort_dir)
+    qs, _, _, _, _ = _build_ocorrencia_filtered_qs(request)
 
     if formato == "pdf":
         return export_ocorrencias_pdf(request, qs)
@@ -846,28 +803,13 @@ def ocorrencia_new(request):
             )
 
     # GET normal (se alguém abrir /ocorrencias/new/ no navegador)
-    query = request.GET.get("q", "")
-    scope = request.GET.get("scope", "default")
-    sort_field = request.GET.get("sort", "")
-    sort_dir = request.GET.get("dir", "desc")
-    if scope not in ("default", "descricao"):
-        scope = "default"
-    qs = Ocorrencia.objects.annotate(total_anexos=Count("anexos"))
-    qs = apply_ocorrencia_search(qs, query, scope)
-    qs, sort_field, sort_dir = apply_ocorrencia_ordering(qs, sort_field, sort_dir)
-    page_obj = Paginator(qs, 20).get_page(1)
-    return render(
-        request,
-        "ocorrencias/ocorrencia.html",
-        {"page_obj": page_obj, "q": query, "scope": scope, "sort": sort_field, "dir": sort_dir},
-    )
+    return _render_ocorrencia_page(request)
 
 @login_required
 def ocorrencia_edit(request, pk):
     ocorrencia = get_object_or_404(Ocorrencia, pk=pk)
 
-    # ✅ Só edita via POST
-    if request.method != "POST":
+    if request.method not in {"POST", "PATCH"}:
         return api_error(
             code="method_not_allowed",
             message="Método não permitido.",

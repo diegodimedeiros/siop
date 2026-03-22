@@ -22,10 +22,10 @@ urlpatterns = [
     path("api/catalogos/transportes/", views.catalogo_transportes),
     path("api/catalogos/encaminhamentos/", views.catalogo_encaminhamentos),
     path("api/catalogos/primeiros-socorros/", views.catalogo_primeiros_socorros),
-    path("api/ocorrencias/", views.ocorrencia_list, name="api_ocorrencia_list"),
-    path("api/ocorrencias/<int:pk>/", views.ocorrencia_view, name="api_ocorrencia_view"),
-    path("api/acessos-terceiros/", views.acesso_terceiros_list, name="api_acesso_terceiros_list"),
-    path("api/acessos-terceiros/<int:pk>/", views.acesso_terceiros_view, name="api_acesso_terceiros_view"),
+    path("api/ocorrencias/", views.api_ocorrencias, name="api_ocorrencia_list"),
+    path("api/ocorrencias/<int:pk>/", views.api_ocorrencia_detail, name="api_ocorrencia_view"),
+    path("api/acessos-terceiros/", views.api_acessos_terceiros, name="api_acesso_terceiros_list"),
+    path("api/acessos-terceiros/<int:pk>/", views.api_acesso_terceiros_detail, name="api_acesso_terceiros_view"),
 
     # Ocorrências
     path("ocorrencias/", views.ocorrencia, name="ocorrencia"),

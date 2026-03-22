@@ -72,9 +72,13 @@ Regra:
 ## Rotas canonicas por recurso
 
 - `GET /api/ocorrencias/`
+- `POST /api/ocorrencias/`
 - `GET /api/ocorrencias/<id>/`
+- `PATCH /api/ocorrencias/<id>/`
 - `GET /api/acessos-terceiros/`
+- `POST /api/acessos-terceiros/`
 - `GET /api/acessos-terceiros/<id>/`
+- `PATCH /api/acessos-terceiros/<id>/`
 
 As rotas antigas permanecem ativas para compatibilidade.
 

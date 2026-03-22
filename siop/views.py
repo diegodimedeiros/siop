@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import render
+from core.api import api_error
 
 from .models import Ocorrencia
 from .view.acesso_terceiros import (
@@ -87,3 +88,55 @@ def chamados(request):
 @login_required
 def flora(request):
     return render(request, "controle_bc/flora.html")
+
+
+@login_required
+def api_ocorrencias(request):
+    if request.method == "GET":
+        return ocorrencia_list(request)
+    if request.method == "POST":
+        return ocorrencia_new(request)
+    return api_error(
+        code="method_not_allowed",
+        message="Método não permitido.",
+        status=405,
+    )
+
+
+@login_required
+def api_ocorrencia_detail(request, pk):
+    if request.method == "GET":
+        return ocorrencia_view(request, pk)
+    if request.method in {"PATCH", "POST"}:
+        return ocorrencia_edit(request, pk)
+    return api_error(
+        code="method_not_allowed",
+        message="Método não permitido.",
+        status=405,
+    )
+
+
+@login_required
+def api_acessos_terceiros(request):
+    if request.method == "GET":
+        return acesso_terceiros_list(request)
+    if request.method == "POST":
+        return acesso_terceiros_new(request)
+    return api_error(
+        code="method_not_allowed",
+        message="Método não permitido.",
+        status=405,
+    )
+
+
+@login_required
+def api_acesso_terceiros_detail(request, pk):
+    if request.method == "GET":
+        return acesso_terceiros_view(request, pk)
+    if request.method in {"PATCH", "POST"}:
+        return acesso_terceiros_edit(request, pk)
+    return api_error(
+        code="method_not_allowed",
+        message="Método não permitido.",
+        status=405,
+    )

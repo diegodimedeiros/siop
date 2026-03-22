@@ -347,6 +347,81 @@ Nao criar helper quando:
 
 O endpoint esta alinhado ao padrao consolidado do projeto e pode ser tratado como referencia de implementacao para fluxos `create`.
 
+## Direcao Operacional para `ocorrencias.py`
+
+Nesta fase do projeto, a evolucao de `siop/view/ocorrencias.py` deve seguir o mesmo padrao incremental ja validado em `acesso_terceiros.py` e `chamado.py`: reduzir duplicacao estrutural, centralizar infraestrutura repetida, preservar o contrato HTTP/JSON, manter a regra de negocio intacta e medir continuamente com checker e testes.
+
+O arquivo ainda concentra:
+
+- exportacao CSV, XLSX e PDF
+- serializacao de anexos, lista e detalhe
+- busca, ordenacao e filtros
+- paginacao
+- listagem JSON e listagem parcial HTML
+- render da tela principal
+- detail JSON
+- create e edit
+- catalogos e endpoints auxiliares
+
+Ou seja: o problema residual do modulo ja nao e mais falta de padrao, e sim concentracao de responsabilidade.
+
+### Ordem correta de consolidacao
+
+1. centralizar queryset, busca, filtros, ordenacao e paginacao
+2. centralizar a infraestrutura de exportacao
+3. agrupar serializacao e render da tela principal
+4. preservar `create/edit` no padrao oficial ja consolidado
+5. medir novamente antes de considerar qualquer split fisico
+
+### Cortes internos recomendados
+
+Para listagem e filtros:
+
+- `_build_ocorrencias_base_qs()`
+- `_normalize_ocorrencia_search_params(request)`
+- `_build_ocorrencia_filtered_qs(request)`
+
+Para exportacao:
+
+- `OCORRENCIAS_EXPORT_HEADERS`
+- `OCORRENCIAS_EXPORT_BASE_COL_WIDTHS`
+- `_get_ocorrencias_export_row_getters()`
+
+Para render da pagina:
+
+- `_build_ocorrencia_page_context(request)`
+- `_render_ocorrencia_page(request)`
+
+Para serializacao, quando necessario:
+
+- `_serialize_ocorrencia_base_fields(...)`
+- `_serialize_ocorrencia_audit_fields(...)`
+- `_serialize_ocorrencia_anexos(...)`
+
+### O que nao fazer nesta etapa
+
+- nao criar arquitetura nova
+- nao mover tudo para novos modulos fisicos de uma vez
+- nao alterar contrato JSON
+- nao mudar regra de negocio
+- nao trocar semantica de filtros, paginacao ou exportacao
+
+### Criterio de pronto desta fase
+
+Essa etapa pode ser considerada bem-feita quando:
+
+- listagem, filtros, paginacao e export usam a mesma base de queryset
+- exportacao nao repete `headers` e `row_getters`
+- a tela principal nao tem render duplicado
+- serializacao continua previsivel e centralizada
+- `create/edit` permanecem no padrao oficial do projeto
+- o checker nao aponta erro duro
+- o restante do warning de tamanho represente apenas volume residual, e nao inconsistencia estrutural
+
+### Formulacao oficial da etapa
+
+A refatoracao final de `ocorrencias.py` deve reduzir duplicacao estrutural de queryset, filtros, paginacao, exportacao, serializacao e render da tela principal, preservando o contrato HTTP/JSON, o padrao de `create/edit` ja consolidado e toda a regra de negocio existente, com validacao continua por checker e testes antes de qualquer split fisico do arquivo.
+
 ## Regra de Ouro
 
 Nenhuma melhoria estrutural deve alterar o comportamento do sistema.

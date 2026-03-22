@@ -1,0 +1,46 @@
+{
+  "Sexo": [
+    "Fêmea",    
+    "Macho",
+    "Não identificado"
+  ],
+  "Condicao": [
+    "Abandonado",    
+    "Atropelado",
+    "Desorientado",
+    "Doente",
+    "Ferido",
+    "Maus-tratos",
+    "Preso - Enroscado",
+    "Outro"
+  ],
+  "Estado": [
+    "Agressivo",
+    "Consciente",
+    "Debilitado",
+    "Estável",
+    "Imóvel",
+    "Inconsciente",
+    "Óbito",
+    "Outro"
+  ],
+  "Atendimento": [    
+    "Captura",
+    "Contenção",
+    "Imobilização",
+    "Liberação no local",
+    "Limpeza de ferimentos",
+    "Nenhum atendimento necessário",
+    "Transporte",
+    "Outro"
+  ],
+  "Destino": [
+    "Abrigo - ONG",
+    "Clínica Veterinária",
+    "Devolvido ao tutor",
+    "Encaminhado a Órgão Ambiental",
+    "Permanecerá em observação",
+    "Solto na natureza",
+    "Outro"
+  ]
+}

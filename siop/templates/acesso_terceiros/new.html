@@ -1,0 +1,113 @@
+{% load tz %}
+<div class="content-grid">
+  <!-- COLUNA PRINCIPAL -->
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Criar acesso de terceiros</div>
+      </div>
+      <div class="card-actions">
+        <span class="status-badge completed">Novo AT</span>
+      </div>
+    </div>
+
+    <!-- GRID DE CAMPOS -->
+    <form id="acesso-terceiros-form" method="post" enctype="multipart/form-data"
+      action="{% url 'acesso_terceiros_new' %}">
+      {% csrf_token %}
+      <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-group-settings">
+          <label for="data">Entrada</label>
+          <input type="datetime-local" id="data" name="data" required>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="saida">Saída</label>
+          <input type="datetime-local" id="saida" name="saida">
+        </div>
+
+        <div class="form-group-settings">
+          <label for="empresa">Empresa</label>
+          <input type="text" id="empresa" name="empresa">
+        </div>
+
+        <div class="form-group-settings">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="documento">Documento</label>
+          <input type="text" id="documento" name="documento" required>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="p1">P1</label>
+          <select id="p1" name="p1" required>
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="placa_veiculo">Placa do veículo</label>
+          <input type="text" id="placa_veiculo" name="placa_veiculo">
+        </div>
+
+
+
+        <div class="form-group-settings full-width">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" name="descricao" placeholder="Descrição aqui..."></textarea>
+        </div>
+
+        <div class="form-group-settings full-width">
+          <label for="anexos">Adicionar anexos</label>
+          <input type="file" id="anexos" name="anexos" multiple>
+        </div>
+
+      </div>
+    </form>
+  </section>
+
+  <!-- COLUNA LATERAL -->
+  <aside class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Ações</div>
+      </div>
+    </div>
+
+    <div class="btn-group" style="flex-direction: column;">
+      <button class="btn btn-secondary" type="button" id="btn-salvar">
+        Salvar
+      </button>
+
+      <button class="btn btn-danger" type="button" id="btn-cancelar"
+        onclick="document.getElementById('acesso-terceiros-form')?.reset()">
+        Cancelar
+      </button>
+
+    </div>
+
+    <div style="margin-top: 22px;">
+      <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+        <div>
+          <span style="color: var(--text-muted);">Criado em</span><br>
+          <span id="view-criado-em">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Criado por</span><br>
+          <span id="view-criado-por">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Modificado em</span><br>
+          <span id="view-modificado-em">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Modificado por</span><br>
+          <span id="view-modificado-por">—</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

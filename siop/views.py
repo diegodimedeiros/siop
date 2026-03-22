@@ -1,0 +1,89 @@
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.shortcuts import render
+
+from .models import Ocorrencia
+from .view.acesso_terceiros import (
+    acesso_terceiro,
+    acesso_terceiros_edit,
+    acesso_terceiros_export,
+    acesso_terceiros_export_view_pdf,
+    acesso_terceiros_list,
+    acesso_terceiros_list_partial,
+    acesso_terceiros_new,
+    acesso_terceiros_view,
+)
+from .view.controle_bc import controle_bc
+from .view.atendimento import atendimento
+from .view.manejo import catalogo_especies_por_classe, manejo
+from .view.ocorrencias import (
+    anexo_download,
+    catalogo_areas,
+    catalogo_encaminhamentos,
+    catalogo_locais_por_area,
+    catalogo_naturezas,
+    catalogo_p1,
+    catalogo_primeiros_socorros,
+    catalogo_sexos,
+    catalogo_tipos_ocorrencia,
+    catalogo_tipos_pessoa,
+    catalogo_tipos_por_natureza,
+    catalogo_transportes,
+    ocorrencia,
+    ocorrencia_edit,
+    ocorrencia_export,
+    ocorrencia_export_view_pdf,
+    ocorrencia_list,
+    ocorrencia_list_partial,
+    ocorrencia_new,
+    ocorrencia_view,
+)
+
+
+@login_required
+def home_view(request):
+    qs = Ocorrencia.objects.all()
+    total_ocorrencias = qs.count()
+    total_abertas = qs.filter(status=False).count()
+    total_finalizadas = qs.filter(status=True).count()
+    total_bombeiro_civil = qs.filter(bombeiro_civil=True).count()
+    taxa_finalizacao = round((total_finalizadas / total_ocorrencias) * 100, 1) if total_ocorrencias else 0
+    taxa_bombeiro_civil = round((total_bombeiro_civil / total_ocorrencias) * 100, 1) if total_ocorrencias else 0
+
+    top_areas = list(
+        qs.values("area")
+        .annotate(total=Count("id"))
+        .order_by("-total", "area")[:5]
+    )
+    top_naturezas = list(
+        qs.values("natureza")
+        .annotate(total=Count("id"))
+        .order_by("-total", "natureza")[:5]
+    )
+    recentes = qs.order_by("-data_ocorrencia")[:6]
+
+    return render(
+        request,
+        "home/home.html",
+        {
+            "total_ocorrencias": total_ocorrencias,
+            "total_abertas": total_abertas,
+            "total_finalizadas": total_finalizadas,
+            "total_bombeiro_civil": total_bombeiro_civil,
+            "taxa_finalizacao": taxa_finalizacao,
+            "taxa_bombeiro_civil": taxa_bombeiro_civil,
+            "top_areas": top_areas,
+            "top_naturezas": top_naturezas,
+            "ocorrencias_recentes": recentes,
+        },
+    )
+
+
+@login_required
+def chamados(request):
+    return render(request, "controle_bc/chamados.html")
+
+
+@login_required
+def flora(request):
+    return render(request, "controle_bc/flora.html")

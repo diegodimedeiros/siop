@@ -1,0 +1,134 @@
+{% load tz %}
+<div class="content-grid">
+    <!-- COLUNA PRINCIPAL -->
+    <section class="glass-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Informações do acesso de terceiros <span id="view-title-id"></span></div>
+            </div>
+            <div class="card-actions">
+                <span class="status-badge pending" id="view-status-badge">Em aberto</span>
+            </div>
+        </div>
+
+        <!-- GRID DE CAMPOS -->
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="form-group-settings">
+                <label>ID</label>
+                <input type="text" id="view-id" value="{{ acesso_terceiro.id }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Data/Hora de entrada</label>
+                <input type="text" id="view-data" value="{{ acesso_terceiro.entrada|localtime|date:'d/m/Y H:i' }}"
+                    disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Empresa</label>
+                <input type="text" id="view-local" value="{{ acesso_terceiro.empresa }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Nome completo</label>
+                <input type="text" id="view-tipo" value="{{ acesso_terceiro.nome }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Documento</label>
+                <input type="text" id="view-area" value="{{ acesso_terceiro.documento }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>P1</label>
+                <input type="text" id="view-pessoa" value="{{ acesso_terceiro.p1 }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Data/Hora de saída</label>
+                <input type="text" id="view-natureza" value="{{ acesso_terceiro.saida|localtime|date:'d/m/Y H:i' }}"
+                    disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Placa do veículo</label>
+                <input type="text" id="view-cftv" value="{{ acesso_terceiro.placa_veiculo }}" disabled>
+            </div>
+
+            <div class="form-group-settings full-width">
+                <label>Descrição</label>
+                <textarea id="view-descricao" disabled>{{ acesso_terceiro.descricao }}</textarea>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- COLUNA LATERAL -->
+    <aside class="glass-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Ações</div>
+            </div>
+        </div>
+        <div class="btn-group" style="flex-direction: column;">
+            <button class="btn btn-secondary" type="button" id="btn-view-edit">
+                Editar
+            </button>
+            <button class="btn btn-secondary" type="button" id="btn-view-export-pdf">
+                Exportar PDF
+            </button>
+
+            <button class="btn btn-danger" type="button" id="btn-cancelar-edit">
+                Cancelar
+            </button>
+        </div>
+        <div style="margin-top: 22px;">
+            <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+                <div>
+                    <span style="color: var(--text-muted);">Criado em</span><br>
+                    <span id="view-criado-em">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Criado por</span><br>
+                    <span id="view-criado-por">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Modificado em</span><br>
+                    <span id="view-modificado-em">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Modificado por</span><br>
+                    <span id="view-modificado-por">—</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- BLOCO DE ANEXOS -->
+<section class="glass-card table-card" style="margin-top: 24px;">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Anexos</div>
+            <div class="card-subtitle">Arquivos vinculados ao acesso</div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Arquivo</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+
+            <tbody id="view-anexos">
+                <tr>
+                    <td colspan="4">Selecione um acesso de terceiros para ver os anexos.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,70 @@
+{
+  "Ambiental": [
+    "Alagamento",
+    "Animal ferido",
+    "Animal silvestre",
+    "Animal solto",
+    "Árvore caída",
+    "Árvore com risco de queda",
+    "Dano à vegetação",
+    "Descarte irregular de lixo",
+    "Galho com risco de queda",
+    "Incêndio / Foco de incêndio"
+  ],
+  "Assistencial": [
+    "Acidente com colaborador",
+    "Acidente com terceiro",
+    "Acidente com visitante",
+    "Atendimento Bombeiro Civil",
+    "Incidente com colaborador",
+    "Incidente com terceiro",
+    "Incidente com visitante",
+    "Pessoa desacordada",
+    "Pessoa desorientada",
+    "Pessoa perdida"
+  ],
+  "Segurança": [
+    "Agressão",
+    "Briga/Discussão",
+    "Comportamento suspeito",
+    "Desordem",
+    "Drone avistado",
+    "Furto",
+    "Invasão de área restrita",
+    "Roubo",
+    "Situação de risco",
+    "Tentativa de furto",
+    "Uso de entorpecentes",
+    "Vandalismo"
+  ],
+  "Operacional": [
+    "Apoio a evento",
+    "Controle de acesso",
+    "Limpeza",
+    "Manutenção corretiva",
+    "Manutenção preventiva",
+    "Organização de fluxo"
+  ],
+  "Outros": [
+    "Não identificado",
+    "Situação atípica"
+  ],
+  "Técnica": [
+    "Ausencia de energia",
+    "CFTV inoperante",
+    "Equipamento com defeito",
+    "Falha elétrica",
+    "Falha Internet",
+    "Falha Rádio Comunicador",
+    "Iluminação apagada",
+    "Sinalização",
+    "Sistema fora do ar"
+  ],
+  "Clima": [
+    "Chuva forte",
+    "Granizo",
+    "Nevoeiro",
+    "Tempestade",
+    "Vento forte"
+  ]
+}

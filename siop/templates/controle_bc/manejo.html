@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block nav_controlebc_active %}active{% endblock %}
+
+{% block content %}
+<main class="main-content">
+  <nav class="navbar">
+    <h1 class="page-title">Formulário de Manejo de Fauna</h1>
+    <div class="navbar-right">
+      <a href="{% url 'controle_bc' %}" class="nav-btn" title="Voltar para Controle BC"
+        aria-label="Voltar para Controle BC">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+      </a>
+      <button class="nav-btn" id="theme-toggle" title="Toggle Light/Dark Mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="M4.93 4.93l1.41 1.41" />
+          <path d="M17.66 17.66l1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="M6.34 17.66l-1.41 1.41" />
+          <path d="M19.07 4.93l-1.41 1.41" />
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          style="display: none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div class="content-grid grid-cols-1">
+    <section class="glass-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title"></div>
+          <div class="card-subtitle">Preencha os dados conforme os campos do modelo de manejo.</div>
+        </div>
+        <div class="card-actions">
+          <span class="status-badge completed">Novo</span>
+        </div>
+      </div>
+
+      {% if form_error %}
+      <div class="form-alert" role="alert">
+        {{ form_error }}
+      </div>
+      {% endif %}
+
+      <form id="manejo-form" class="manejo-form" method="post" action="{% url 'manejo' %}"
+        enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-grid grid-cols-2">
+          <div class="form-group-settings">
+            <label for="data_hora">Data e Hora do Manejo</label>
+            <input type="datetime-local" id="data_hora" name="data_hora" required>
+          </div>
+
+          <div class="form-group-settings"></div>
+
+          <div class="form-group-settings">
+            <label for="classe">Classe</label>
+            <select id="classe" name="classe" required>
+              <option value="">Selecione...</option>
+              {% for classe in classes_fauna %}
+              <option value="{{ classe }}">{{ classe }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="nome_popular">Nome Popular</label>
+            <select id="nome_popular" name="nome_popular">
+              <option value="">Selecione a Classe primeiro...</option>
+            </select>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="nome_cientifico">Nome Científico</label>
+            <input type="text" id="nome_cientifico" name="nome_cientifico">
+          </div>
+
+          <div class="form-group-settings">
+            <label for="estagio_desenvolvimento">Estágio de Desenvolvimento</label>
+            <input type="text" id="estagio_desenvolvimento" name="estagio_desenvolvimento">
+          </div>
+
+          <div class="form-group-settings">
+            <label for="area_captura">Área de Captura</label>
+            <select id="area_captura" name="area_captura" required>
+              <option value="">Selecione...</option>
+              {% for area in areas_captura %}
+              <option value="{{ area }}">{{ area }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="local_captura">Local de Captura</label>
+            <select id="local_captura" name="local_captura" required>
+              <option value="">Selecione a área primeiro...</option>
+            </select>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="descricao_local">Descrição do Local</label>
+            <textarea id="descricao_local" name="descricao_local"
+              placeholder="Descreva o local de captura..."></textarea>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="foto_captura">Fotos da Captura</label>
+            <div class="glass-card upload-panel-card">
+              <div class="upload-panel-controls">
+                <input type="file" id="foto_captura" name="foto_captura" accept="image/*" capture="environment" multiple
+                  class="sr-file-input">
+                <label for="foto_captura" id="foto_captura_btn" class="btn btn-secondary file-trigger-button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"
+                    aria-hidden="true">
+                    <path d="M14.5 4H20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.5" />
+                    <path d="M9 4h6l1.5 3h-9z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                  <span>Abrir câmera</span>
+                </label>
+                <span id="quantidade_fotos">0 fotos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="lista_fotos_captura">Lista de Imagens de Captura</label>
+            <div class="glass-card list-panel-card">
+              <div class="list-panel-shell">
+                <div id="lista_fotos_captura_vazia" class="empty-state-text">
+                  Nenhuma foto capturada ainda.
+                </div>
+                <div id="lista_fotos_captura" class="list-scroll-area"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="geolocalizacao_captura">Geolocalização da Captura</label>
+            <input type="hidden" id="latitude_captura" name="latitude_captura">
+            <input type="hidden" id="longitude_captura" name="longitude_captura">
+            <div class="glass-card geolocation-panel-card">
+              <div class="geolocation-panel-shell">
+                <div id="geolocalizacao_captura_vazia" class="empty-state-text">
+                  Nenhuma geolocalização registrada ainda.
+                </div>
+                <div id="geolocalizacao_captura" class="geolocation-list-area"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div>
+              <label>
+                <input type="checkbox" id="importancia_medica" name="importancia_medica"> Importância Médica?
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" id="realizado_manejo" name="realizado_manejo"> Manejo Realizado?
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" id="acionado_orgao_publico" name="acionado_orgao_publico"> Acionou Órgão Público?
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="orgao_publico_group">
+            <label for="orgao_publico">Órgão Público</label>
+            <input type="text" id="orgao_publico" name="orgao_publico" disabled>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="numero_boletim_ocorrencia_group">
+            <label for="numero_boletim_ocorrencia">Número do Boletim de Ocorrência</label>
+            <input type="text" id="numero_boletim_ocorrencia" name="numero_boletim_ocorrencia" disabled>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="area_soltura_group">
+            <label for="area_soltura">Área de Soltura</label>
+            <input type="text" id="area_soltura" name="area_soltura" disabled>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="local_soltura_group">
+            <label for="local_soltura">Local de Soltura</label>
+            <input type="text" id="local_soltura" name="local_soltura" disabled>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="descricao_local_soltura">Descrição do Local de Soltura</label>
+            <textarea id="descricao_local_soltura" name="descricao_local_soltura"
+              placeholder="Descreva o local de soltura..."></textarea>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="fotos_soltura_group">
+            <label for="foto_soltura">Fotos da Soltura</label>
+            <div class="glass-card upload-panel-card">
+              <div class="upload-panel-controls">
+                <input type="file" id="foto_soltura" name="foto_soltura" accept="image/*" capture="environment" multiple
+                  class="sr-file-input">
+                <label for="foto_soltura" id="foto_soltura_btn" class="btn btn-secondary file-trigger-button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"
+                    aria-hidden="true">
+                    <path d="M14.5 4H20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.5" />
+                    <path d="M9 4h6l1.5 3h-9z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                  <span>Abrir câmera</span>
+                </label>
+                <span id="quantidade_fotos_soltura">0 fotos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-settings is-hidden" id="lista_fotos_soltura_group">
+            <label for="lista_fotos_soltura">Lista de Imagens de Soltura</label>
+            <div class="glass-card list-panel-card">
+              <div class="list-panel-shell">
+                <div id="lista_fotos_soltura_vazia" class="empty-state-text">
+                  Nenhuma foto capturada ainda.
+                </div>
+                <div id="lista_fotos_soltura" class="list-scroll-area"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="geolocalizacao_soltura">Geolocalização da Soltura</label>
+            <input type="hidden" id="latitude_soltura" name="latitude_soltura">
+            <input type="hidden" id="longitude_soltura" name="longitude_soltura">
+            <div class="glass-card geolocation-panel-card">
+              <div class="geolocation-panel-shell">
+                <div id="geolocalizacao_soltura_vazia" class="empty-state-text">
+                  Nenhuma geolocalização registrada ainda.
+                </div>
+                <div id="geolocalizacao_soltura" class="geolocation-list-area"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="motivo_acionamento">Motivo do Acionamento</label>
+            <textarea id="motivo_acionamento" name="motivo_acionamento"
+              placeholder="Informe o motivo do acionamento..."></textarea>
+          </div>
+
+          <div class="form-group-settings full-width">
+            <label for="observacoes">Observações</label>
+            <textarea id="observacoes" name="observacoes" placeholder="Informações adicionais..."></textarea>
+          </div>
+
+          <div class="form-group-settings">
+            <label for="responsavel_manejo">Responsável pelo Manejo</label>
+            <select id="responsavel_manejo" name="responsavel_manejo">
+              <option value="">Selecione...</option>
+              {% for responsavel in responsaveis_manejo %}
+              <option value="{{ responsavel.value }}">{{ responsavel.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </form>
+    </section>
+    <aside class="glass-card actions-panel-card">
+      <div class="btn-group actions-button-stack">
+        <button class="btn btn-secondary" type="submit" form="manejo-form">
+          Salvar
+        </button>
+        <button class="btn btn-danger" type="reset" form="manejo-form">
+          Limpar
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <div id="modal-sucesso" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <h2 class="modal-message">Manejo cadastrado com sucesso!</h2>
+      <p>ID do Manejo: <span id="modal-id"></span></p>
+      <button class="btn btn-primary" type="button" data-modal-close="#modal-sucesso">
+        OK
+      </button>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/controlebc-manejo.js' %}"></script>
+{% endblock %}

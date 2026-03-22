@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SIOP{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+    <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'img/favicon/site.webmanifest' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+</head>
+
+<body data-real-path="{{ request.get_full_path }}">
+    <div class="background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="dashboard">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <div class="logo">
+                        <img src="{% static 'img/favicon/apple-touch-icon.png' %}" alt="SIOP logo">
+                    </div>
+                    <span class="logo-text">SIOP</span>
+                </div>
+                <div class="logo-subtext">Sistema de Inteligência e Operações</div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-section">
+                    <span class="nav-section-title">Menu</span>
+                    <ul>
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link {% block nav_home_active %}{% endblock %}">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect width="7" height="9" x="3" y="3" rx="1" />
+                                    <rect width="7" height="5" x="14" y="3" rx="1" />
+                                    <rect width="7" height="9" x="14" y="12" rx="1" />
+                                    <rect width="7" height="5" x="3" y="16" rx="1" />
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'ocorrencia' %}"
+                                class="nav-link {% block nav_ocorrencia_active %}{% endblock %}">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                                    <path d="M12 9v4" />
+                                    <path d="M12 17h.01" />
+                                </svg>
+                                Ocorrências
+                                <span class="nav-badge">New</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'acesso_terceiro' %}"
+                                class="nav-link {% block nav_acesso_terceiro_active %}{% endblock %}">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                                    <path d="M6.376 18.91a6 6 0 0 1 11.249.003" />
+                                    <circle cx="12" cy="11" r="4" />
+                                </svg>
+                                Acesso Terceiros                                
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'controle_bc' %}"
+                                class="nav-link {% block nav_controlebc_active %}{% endblock %}">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M4 13a8 8 0 0 1 16 0" />
+                                    <path d="M3 13h18" />
+                                    <path d="M6 13v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2" />
+                                    <path d="M12 5v4" />
+                                    <path d="M8.5 8.5 12 9" />
+                                    <path d="M15.5 8.5 12 9" />
+                                </svg>
+                                Controle BC
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+
+            <div class="sidebar-footer">
+
+                {% if show_settings %}
+                <a href="{% url 'admin:index' %}" class="nav-link {% block nav_settings_active %}{% endblock %}"
+                    style="margin-top: 8px;" target="_blank">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Settings
+                </a>
+                {% endif %}
+                <form method="post" action="{% url 'logout' %}" style="margin-top: 8px;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link nav-link-btn"
+                        style="margin-top: 8px; width: 100%; text-align: left;">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m16 17 5-5-5-5" />
+                            <path d="M21 12H9" />
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        </svg>
+                        Logout
+                    </button>
+                </form>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if user.is_authenticated %}
+                        {% if user.first_name or user.last_name %}
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {% else %}
+                        {{ user.username|slice:":2"|upper }}
+                        {% endif %}
+                        {% else %}
+                        US
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">
+                            {% if user.is_authenticated %}
+                            {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
+                            {% else %}
+                            Visitante
+                            {% endif %}
+                        </div>
+                        <div class="user-role">
+                            {% if user.is_authenticated %}
+                            {% if user.is_superuser or user.is_staff %}
+                            Administrador
+                            {% elif user.groups.all %}
+                            {{ user.groups.all.0.name }}
+                            {% else %}
+                            User
+                            {% endif %}
+                            {% else %}
+                            Não autenticado
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-copyright">
+                    <div class="sidebar-logo">
+                        <a href="https://www.parquecaracol.com.br" target="_blank" rel="noopener noreferrer"
+                            class="img-logo"></a>
+                    </div>
+                    <a href="mailto:ti@cnct.com.br">
+                        &copy; {% now "Y" %} SIOP - Todos os direitos reservados<br>Parque do Caracol<br>Coordenação de
+                        Infraestrutura de TI
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <button id="sidebar-handle" class="sidebar-handle" type="button" aria-expanded="false"
+            aria-label="Abrir menu lateral">
+            <svg class="sidebar-handle-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" />
+            </svg>
+            <svg class="sidebar-handle-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m15 18-6-6 6-6" />
+            </svg>
+        </button>
+        <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+
+        <!-- Área que cada página vai preencher -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Mobile Menu Toggle (opcional) -->
+    <button class="mobile-menu-toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+    </button>
+
+    <script>
+        (function () {
+            const key = "siop_real_path";
+            const navEntry = performance.getEntriesByType("navigation")[0];
+            const navType = navEntry ? navEntry.type : "";
+            const realPath = document.body?.dataset?.realPath || "/";
+
+            // Em reload/back na raiz, tenta restaurar a última rota real visitada.
+            if (realPath === "/" && (navType === "reload" || navType === "back_forward")) {
+                const savedPath = sessionStorage.getItem(key);
+                if (savedPath && savedPath !== "/") {
+                    window.location.replace(savedPath);
+                    return;
+                }
+            }
+
+            sessionStorage.setItem(key, realPath);
+
+            // Mantém a URL visível mascarada como "/".
+            if (window.location.pathname !== "/") {
+                window.history.replaceState({ masked: true, realPath }, "", "/");
+            }
+        })();
+    </script>
+    <script src="{% static 'js/shared/http.js' %}"></script>
+    <script src="{% static 'js/shared/forms.js' %}"></script>
+    <script src="{% static 'js/shared/files.js' %}"></script>
+    <script src="{% static 'js/shared/geolocation.js' %}"></script>
+    <script src="{% static 'js/shared/modal.js' %}"></script>
+    <script src="{% static 'js/shared/feedback.js' %}"></script>
+    <script src="{% static 'js/shared/signature-pad.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-core.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-feedback.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-search-list.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-view-edit.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-create.js' %}"></script>
+    <script src="{% static 'js/ocorrencias-export.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

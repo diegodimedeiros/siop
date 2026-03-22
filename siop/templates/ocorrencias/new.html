@@ -1,0 +1,130 @@
+{% load tz %}
+<div class="content-grid">
+  <!-- COLUNA PRINCIPAL -->
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Criar ocorrência</div>
+      </div>
+      <div class="card-actions">
+        <span class="status-badge completed">Nova OC</span>
+      </div>
+    </div>
+
+    <!-- GRID DE CAMPOS -->
+    <form id="ocorrencia-form" method="post" enctype="multipart/form-data" action="{% url 'ocorrencia_new' %}">
+      {% csrf_token %}
+      <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-group-settings">
+          <label for="natureza">Natureza</label>
+          <select id="natureza" name="natureza" required>
+            <option value="">Selecione a natureza primeiro...</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="tipo">Tipo</label>
+          <select id="tipo" name="tipo" required>
+            <option value="">Selecione a natureza primeiro...</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="area">Área</label>
+          <select id="area" name="area" required>
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="local">Local</label>
+          <select id="local" name="local" required>
+            <option value="">Selecione a área primeiro...</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="pessoa">Pessoa</label>
+          <select id="pessoa" name="pessoa" required>
+            <option value="">Selecione...</option>
+            <option value="AGENTE_PUBLICO">Agente Público</option>
+            <option value="COLABORADOR">Colaborador</option>
+            <option value="LOCATARIO">Locatário</option>
+            <option value="TERCEIRO">Terceiro</option>
+            <option value="VISITANTE">Visitante</option>
+            <option value="OUTROS">Outros</option>
+          </select>
+        </div>
+
+        <div class="form-group-settings">
+          <label for="data">Data e Hora da Ocorrência</label>
+          <input type="datetime-local" id="data" name="data" required>
+        </div>
+
+        <div class="form-group-settings full-width">
+          <label for="descricao">Descrição</label>
+          <textarea id="descricao" name="descricao" placeholder="Descrição aqui..." required></textarea>
+        </div>
+
+        <div class="form-group-settings full-width">
+          <label for="anexos">Adicionar anexos</label>
+          <input type="file" id="anexos" name="anexos" multiple>          
+        </div>
+
+        <div class="form-group">
+          <div><label><input type="checkbox" id="cftv" name="cftv"> Possui imagens CFTV?</label></div>
+          <div><label><input type="checkbox" id="bombeiro_civil" name="bombeiro_civil"> Acionou BC?</label></div>
+          <div><label><input type="checkbox" id="status" name="status"> Ocorrência Finalizada?</label></div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- COLUNA LATERAL -->
+  <aside class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Ações</div>
+      </div>
+    </div>
+
+    <div class="btn-group" style="flex-direction: column;">
+      <button class="btn btn-secondary" type="button" id="btn-salvar">
+        Salvar
+      </button>
+
+      <button class="btn btn-danger" type="button" id="btn-cancelar"
+        onclick="document.getElementById('ocorrencia-form')?.reset()">
+        Cancelar
+      </button>
+
+      {% if ocorrencia and not ocorrencia.status %}
+      <form method="post" action="" style="margin-top: 8px;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Finalizar ocorrência</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <div style="margin-top: 22px;">
+      <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+        <div>
+          <span style="color: var(--text-muted);">Criado em</span><br>
+          <span id="view-criado-em">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Criado por</span><br>
+          <span id="view-criado-por">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Modificado em</span><br>
+          <span id="view-modificado-em">—</span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">Modificado por</span><br>
+          <span id="view-modificado-por">—</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

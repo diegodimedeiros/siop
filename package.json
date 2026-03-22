@@ -1,0 +1,13 @@
+{
+  "name": "siop-frontend-tooling",
+  "private": true,
+  "scripts": {
+    "lint:js": "eslint static/js --ext .js",
+    "format:check": "prettier --check \"static/js/**/*.js\" \"docs/**/*.md\"",
+    "format:write": "prettier --write \"static/js/**/*.js\" \"docs/**/*.md\""
+  },
+  "devDependencies": {
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.3"
+  }
+}

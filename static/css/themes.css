@@ -1,0 +1,89 @@
+[data-theme="light"] {
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(15, 23, 42, 0.16);
+    --glass-shadow: rgba(15, 23, 42, 0.10);
+    --glass-hover: rgba(15, 23, 42, 0.08);
+    --glass-hover-select: var(--emerald);
+
+    --bg-dark: #eef2f5;
+    --bg-gradient-1: #e6ecef;
+    --bg-gradient-2: #eef3f6;
+    --bg-gradient-3: #f6f8fa;
+
+    --text-primary: #1f2937;
+    --text-white: #f5f5f4;
+    --text-secondary: rgba(31, 41, 55, 0.78);
+    --text-muted: rgba(31, 41, 55, 0.58);
+}
+
+[data-theme="light"] .orb {
+    opacity: 0.10;
+}
+
+[data-theme="light"] .glass-card::before {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.04), transparent);
+}
+
+[data-theme="light"] .glass-card {
+    border: 1px solid var(--emerald-light);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme="light"] .tab-btn {
+    border: 1px solid var(--emerald-light);
+}
+
+[data-theme="light"] .stat-value {
+    background: linear-gradient(135deg, var(--text-primary), #6b7280);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme="light"] .btn-secondary,
+[data-theme="light"] .btn-danger {
+    color: var(--text-white);
+}
+
+[data-theme="light"] .table-wrapper::-webkit-scrollbar-track,
+[data-theme="light"] .chart-wrapper::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .activity-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+}
+
+[data-theme="light"] .data-table tbody tr {
+    transition: background 160ms ease, color 160ms ease;
+}
+
+[data-theme="light"] .data-table tbody tr:hover {
+    background: var(--glass-hover-select);
+    color: #ffffff;
+}
+
+[data-theme="light"] .data-table th {
+    color: #000000;
+    border-bottom: 2px solid var(--emerald-light);
+}
+
+[data-theme="light"] .data-table td {
+    border-bottom: 1px solid var(--emerald-light);
+}
+
+[data-theme="light"] .data-table tbody tr:hover td,
+[data-theme="light"] .data-table tbody tr:hover th,
+[data-theme="light"] .data-table tbody tr:hover a,
+[data-theme="light"] .data-table tbody tr:hover span,
+[data-theme="light"] .data-table tbody tr:hover p,
+[data-theme="light"] .data-table tbody tr:hover div {
+    color: #ffffff;
+}
+
+[data-theme="light"] .data-table tbody tr:hover svg {
+    fill: currentColor;
+    stroke: currentColor;
+}

@@ -1,0 +1,99 @@
+{% load tz %}
+<div>
+    <!-- COLUNA PRINCIPAL -->
+    <section class="glass-card">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead class="card-title">
+                    <tr>
+                        <th><a class="sort-link"
+                                href="?sort=id&dir={% if sort == 'id' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">ID</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=data&dir={% if sort == 'data' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Data</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=natureza&dir={% if sort == 'natureza' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Natureza</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=tipo&dir={% if sort == 'tipo' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Tipo</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=area&dir={% if sort == 'area' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Área</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=local&dir={% if sort == 'local' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Local</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=anexo&dir={% if sort == 'anexo' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Anexo</a>
+                        </th>
+                        <th><a class="sort-link"
+                                href="?sort=status&dir={% if sort == 'status' and dir == 'asc' %}desc{% else %}asc{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}">Status</a>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for ocorrencia in page_obj %}
+                    <tr class="ocorrencia-row" data-id="{{ ocorrencia.id }}" style="cursor:pointer;">
+                        <td class="table-amount">{{ ocorrencia.id }}</td>
+                        <td style="text-align: center;">{{ ocorrencia.data_ocorrencia|localtime|date:"d/m/Y H:i" }}</td>
+                        <td>{{ ocorrencia.natureza }}</td>
+                        <td>{{ ocorrencia.tipo }}</td>
+                        <td>{{ ocorrencia.area }}</td>
+                        <td>{{ ocorrencia.local }}</td>
+                        <td style="text-align: center;">
+
+                            {% if ocorrencia.total_anexos|default:0 > 0 %}
+                            Sim
+                            {% else %}
+                            Não
+                            {% endif %}
+
+                        </td>
+                        <td style="text-align: center;">
+
+                            {% if ocorrencia.status %}
+                            <span class="status-badge completed">Finalizada</span>
+                            {% else %}
+                            <span class="status-badge pending">Em aberto</span>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">Nenhuma ocorrência cadastrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a class="pagination-btn"
+                href="?page=1{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}{% if sort %}&sort={{ sort|urlencode }}&dir={{ dir|urlencode }}{% endif %}">Primeira</a>
+            <a class="pagination-btn"
+                href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}{% if sort %}&sort={{ sort|urlencode }}&dir={{ dir|urlencode }}{% endif %}">Anterior</a>
+            {% else %}
+            <span class="pagination-btn disabled">Primeira</span>
+            <span class="pagination-btn disabled">Anterior</span>
+            {% endif %}
+
+            <span class="pagination-info">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a class="pagination-btn"
+                href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}{% if sort %}&sort={{ sort|urlencode }}&dir={{ dir|urlencode }}{% endif %}">Próxima</a>
+            <a class="pagination-btn"
+                href="?page={{ page_obj.paginator.num_pages }}{% if q %}&q={{ q|urlencode }}{% endif %}{% if scope %}&scope={{ scope|urlencode }}{% endif %}{% if sort %}&sort={{ sort|urlencode }}&dir={{ dir|urlencode }}{% endif %}">Última</a>
+            {% else %}
+            <span class="pagination-btn disabled">Próxima</span>
+            <span class="pagination-btn disabled">Última</span>
+            {% endif %}
+        </div>
+    </section>
+</div>

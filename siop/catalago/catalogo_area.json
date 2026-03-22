@@ -1,0 +1,146 @@
+{
+  "Área Administrativo": [
+    "Área Externa da Administração",
+    "Banheiro Feminino",
+    "Banheiro Masculino",
+    "Banheiro PCD",
+    "CIOP",
+    "Copa",
+    "Escritório Open Space",
+    "Sala Bombeiro Civil",
+    "Sala de Gestores",
+    "Sala de Reuniões",
+    "Sala de Treinamentos",
+    "Sala TI - CPD"
+  ],
+  "Área Carga e Descarga": [
+    "Almoxarifado (Container)",
+    "Carga e Descarga",
+    "Central de Resíduos"
+  ],
+  "Área Churrasqueiras": [
+    "Banheiro Feminino",
+    "Banheiro Feminino - PCD",
+    "Banheiro Masculino",
+    "Banheiro Masculino - PCD",
+    "Churrasqueira 01",
+    "Churrasqueira 02",
+    "Churrasqueira 03",
+    "Churrasqueira 04",
+    "Churrasqueira 05",
+    "Churrasqueira 06",
+    "Churrasqueira 07",
+    "Churrasqueira 08",
+    "Churrasqueira 09",
+    "Churrasqueira 10",
+    "Churrasqueira 11",
+    "Churrasqueira 12",
+    "Quadra de Areia",
+    "Quadra de Beach Tennis",
+    "Quadra de Vôlei"
+  ],
+  "Área Lojas": [
+    "Bloco A 01 - Iter Fotografias",
+    "Bloco A 02 - Iter Fotografias",
+    "Bloco B 03 - Art Castelo",
+    "Bloco B 04 - Art Castelo",
+    "Bloco B 05 - Art Castelo",
+    "Bloco B 06 - Art Castelo",
+    "Bloco C 07 - Waiss",
+    "Bloco C 08 - Waiss",
+    "Bloco C 09 - Mate On",
+    "Bloco C 10 - Mateio",
+    "Bloco D 11 - Estapar",
+    "Bloco D 12 - Chaulet",
+    "Bloco D 13 - Chaulet",
+    "Bloco D 14 - Chaulet",
+    "Bloco E 15 - Royal Trudel",
+    "Bloco E 16 - Jolimont",
+    "Bloco E 17 - Jolimont",
+    "Bloco E 18 - Jolimont",
+    "Casa de Pedra - Casa do Viajante",
+    "Casa Raízes",
+    "Estação Sonho Vivo",
+    "Geodésica - Natural Extremo",
+    "Iter Fotografias - Corajoso",
+    "Iter Fotografias - Mirante",
+    "Restaurante - Sabor e Flor",
+    "Restaurante - Sabor e Flor - Cozinha",
+    "Restaurante - Mirante",
+    "Restaurante - Mirante - Cozinha",
+    "Salto do Pêndulo - Natural Extremo",
+    "Toras - Depósito",
+    "Toras - Golden Tulip"
+  ],
+  "Área Mirante": [
+    "Corajoso",
+    "Mirante"
+  ],
+  "Área Técnica": [
+    "Casa de Bombas",
+    "N&A (Container)",
+    "Nexus (Container)",
+    "Subestação",
+    "Subestação - Mirante",
+    "Verzani (Container)",
+    "Verzani (Oficina)",
+    "Gerador (Observatório)",
+    "Casa de Máquinas (Observatório)"
+  ],
+  "Entrada": [
+    "Entrada de Pedestres",
+    "Parada de Acesso",
+    "Pórtico de Entrada",
+    "Sala de Guias"
+  ],
+  "Estapar": [
+    "Autoatendimento",
+    "Cancelas Entrada",
+    "Cancelas Saída",
+    "Estacionamento",
+    "Estacionamento - Administrativo",
+    "Estacionamento - Bolsão",
+    "Valet"
+  ],
+  "Heliponto": [
+    "Cancela de Entrada - Heliponto",
+    "Cancela de Saída - Heliponto",
+    "Estacionamento - Heliponto",
+    "Heliponto",
+    "Sala - Heliponto"
+  ],
+  "Observatório": [
+    "Depósito do Observatório - CNCT",
+    "Depósito do Observatório - Iter Fotografias",
+    "Elevador do Observatório",
+    "Observatório",
+    "Sala do Observatório - CNCT"
+  ],
+  "Praça dos Gaúchos": [
+    "Bilheteria",
+    "Catracas",
+    "Parquinho Floresta",
+    "Toldo da Praça dos Gaúchos"
+  ],
+  "Trilhas e Locais": [
+    "Bosque dos Xaxins",
+    "Deck da Cascata do Moinho",
+    "Jardim do Mel",
+    "Lajeado",
+    "Mirante da Barragem",
+    "Mirante da Cascata do Moinho",
+    "Parque Serelepe",
+    "Recanto das Borboletas",
+    "Redário - ADM",
+    "Redário - Restaurante",
+    "Trilha do Moinho",
+    "Trilha do Silêncio",
+    "Trilha do Sonho",
+    "Vias das Araucárias",
+    "Vias das Águas",
+    "Vias dos Graxains"
+  ],
+  "Parque do Caracol": [
+    "Parque do Caracol"
+  ]
+}

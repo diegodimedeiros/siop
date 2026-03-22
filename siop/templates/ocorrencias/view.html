@@ -1,0 +1,137 @@
+{% load tz %}
+<div class="content-grid">
+    <!-- COLUNA PRINCIPAL -->
+    <section class="glass-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Informações da ocorrência <span id="view-title-id"></span></div>
+            </div>
+            <div class="card-actions">
+                <span class="status-badge pending" id="view-status-badge">Em aberto</span>
+            </div>
+        </div>
+
+        <!-- GRID DE CAMPOS -->
+        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="form-group-settings">
+                <label>ID</label>
+                <input type="text" id="view-id" value="{{ ocorrencia.id }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Data e Hora</label>
+                <input type="text" id="view-data" value="{{ ocorrencia.data|localtime|date:'d/m/Y H:i' }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Natureza</label>
+                <input type="text" id="view-natureza" value="{{ ocorrencia.natureza }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Tipo</label>
+                <input type="text" id="view-tipo" value="{{ ocorrencia.tipo }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Área</label>
+                <input type="text" id="view-area" value="{{ ocorrencia.area }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Local</label>
+                <input type="text" id="view-local" value="{{ ocorrencia.local }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Pessoa</label>
+                <input type="text" id="view-pessoa" value="{{ ocorrencia.get_pessoa_display }}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>CFTV</label>
+                <input type="text" id="view-cftv" value="{% if ocorrencia.cftv %}Sim{% else %}Não{% endif %}" disabled>
+            </div>
+
+            <div class="form-group-settings">
+                <label>Acionou Bombeiro Civil</label>
+                <input type="text" id="view-bombeiro-civil"
+                    value="{% if ocorrencia.bombeiro_civil %}Sim{% else %}Não{% endif %}" disabled>
+            </div>
+
+            <div class="form-group-settings full-width">
+                <label>Descrição</label>
+                <textarea id="view-descricao" disabled>{{ ocorrencia.descricao }}</textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- COLUNA LATERAL -->
+    <aside class="glass-card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Ações</div>
+            </div>
+        </div>
+        <div class="btn-group" style="flex-direction: column;">
+            <button class="btn btn-secondary" type="button" id="btn-view-edit">
+                Editar
+            </button>
+            <button class="btn btn-secondary" type="button" id="btn-view-export-pdf">
+                Exportar PDF
+            </button>
+
+            <button class="btn btn-danger" type="button" id="btn-cancelar-edit">
+                Cancelar
+            </button>
+        </div>
+        <div style="margin-top: 22px;">
+            <div style="display:flex; flex-direction:column; gap:14px; font-size:14px;">
+                <div>
+                    <span style="color: var(--text-muted);">Criado em</span><br>
+                    <span id="view-criado-em">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Criado por</span><br>
+                    <span id="view-criado-por">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Modificado em</span><br>
+                    <span id="view-modificado-em">—</span>
+                </div>
+                <div>
+                    <span style="color: var(--text-muted);">Modificado por</span><br>
+                    <span id="view-modificado-por">—</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- BLOCO DE ANEXOS -->
+<section class="glass-card table-card" style="margin-top: 24px;">
+    <div class="card-header">
+        <div>
+            <div class="card-title">Anexos</div>
+            <div class="card-subtitle">Arquivos vinculados à ocorrência</div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Arquivo</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+
+            <tbody id="view-anexos">
+                <tr>
+                    <td colspan="4">Selecione uma ocorrência para ver os anexos.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

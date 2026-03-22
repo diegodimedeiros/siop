@@ -1,0 +1,50 @@
+{
+  "Anfíbio": [
+    "Perereca",
+    "Rã",
+    "Sapo",
+    "Outro"
+  ],
+  "Ave": [
+    "Beija-flor",
+    "Coruja",
+    "Curicaca",
+    "Gavião",
+    "Gralha-azul",
+    "João-de-barro",
+    "Maritaca",
+    "Pardal",
+    "Pica-pau",
+    "Pomba",
+    "Quero-quero",
+    "Tucano",
+    "Urubu",
+    "Outro"
+  ],
+  "Mamífero": [
+    "Bugio",
+    "Cachorro-do-mato",
+    "Capivara",
+    "Cão",
+    "Gambá",
+    "Gato",
+    "Gato-do-mato",
+    "Graxaim",
+    "Jaguatirica",
+    "Lobo-guará",
+    "Morcego",
+    "Ouriço",
+    "Puma",
+    "Quati",
+    "Rato",
+    "Rato-do-mato",
+    "Tatu",
+    "Veado",
+    "Outro"
+  ],
+  "Réptil": [
+    "Cobra",
+    "Lagarto",
+    "Outro"
+  ]
+}

@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+{% load tz l10n %}
+{% block nav_home_active %}active{% endblock %}
+
+{% block content %}
+<main class="main-content">
+  <nav class="navbar">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="navbar-right">
+      <button class="nav-btn" id="theme-toggle" title="Toggle Light/Dark Mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="M4.93 4.93l1.41 1.41" />
+          <path d="M17.66 17.66l1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="M6.34 17.66l-1.41 1.41" />
+          <path d="M19.07 4.93l-1.41 1.41" />
+        </svg>
+        <svg class="icon-moon icon-moon-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div class="home-panel-group">
+    <div class="card-header home-panel-header">
+      <div class="home-panel-title-wrap">
+        <h2 class="card-title-panel">Painel de Ocorrências</h2>
+      </div>
+    </div>
+
+    <section class="stats-grid">
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Total de Ocorrências</h3>
+            <div class="stat-value">{{ total_ocorrencias }}</div>
+            <span class="stat-change positive">Base geral</span>
+          </div>
+          <div class="stat-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="16" rx="2" />
+              <path d="M7 8h10M7 12h10M7 16h6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Em Aberto</h3>
+            <div class="stat-value">{{ total_abertas }}</div>
+            <span class="stat-change negative">Requer atenção</span>
+          </div>
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21a8 8 0 0 0-16 0" />
+              <circle cx="12" cy="8" r="4" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Finalizadas</h3>
+            <div class="stat-value">{{ total_finalizadas }}</div>
+            <span class="stat-change positive">{{ taxa_finalizacao }}% de conclusão</span>
+          </div>
+          <div class="stat-icon magenta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Bombeiro Civil</h3>
+            <div class="stat-value">{{ total_bombeiro_civil }}</div>
+            <span class="stat-change positive">{{ taxa_bombeiro_civil }}% das ocorrências</span>
+          </div>
+          <div class="stat-icon success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 13a8 8 0 0 1 16 0v3H4z" />
+              <path d="M12 5v4" />
+              <path d="M7 16v2h10v-2" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-info">
+          <h3>Naturezas Ocorrências</h3>
+          <div class="donut-container donut-container-compact">
+            <div class="donut-chart donut-chart-compact">
+              <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+                <circle class="donut-bg" cx="70" cy="70" r="54"></circle>
+                {% for seg in donut_naturezas.segments %}
+                <circle
+                  class="donut-segment donut-segment-{{ seg.color_class }}"
+                  cx="70"
+                  cy="70"
+                  r="54"
+                  stroke="{{ seg.stroke }}"
+                  stroke-dasharray="{{ seg.dash|unlocalize }} {{ seg.gap|unlocalize }}"
+                  stroke-dashoffset="{{ seg.offset|unlocalize }}"></circle>
+                {% endfor %}
+              </svg>
+              <div class="donut-center">
+                <div class="donut-value">{{ donut_naturezas.total }}</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              {% for seg in donut_naturezas.segments %}
+              <div class="legend-item">
+                <span class="legend-color {{ seg.color_class }}"></span>
+                <span>{{ seg.label }} ({{ seg.value }})</span>
+              </div>
+              {% empty %}
+              <div class="legend-item">
+                <span class="legend-color cyan"></span>
+                <span>Sem dados</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-info">
+          <h3>Áreas Ocorrências</h3>
+          <div class="donut-container donut-container-compact">
+            <div class="donut-chart donut-chart-compact">
+              <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+                <circle class="donut-bg" cx="70" cy="70" r="54"></circle>
+                {% for seg in donut_areas.segments %}
+                <circle
+                  class="donut-segment donut-segment-{{ seg.color_class }}"
+                  cx="70"
+                  cy="70"
+                  r="54"
+                  stroke="{{ seg.stroke }}"
+                  stroke-dasharray="{{ seg.dash|unlocalize }} {{ seg.gap|unlocalize }}"
+                  stroke-dashoffset="{{ seg.offset|unlocalize }}"></circle>
+                {% endfor %}
+              </svg>
+              <div class="donut-center">
+                <div class="donut-value">{{ donut_areas.total }}</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              {% for seg in donut_areas.segments %}
+              <div class="legend-item">
+                <span class="legend-color {{ seg.color_class }}"></span>
+                <span>{{ seg.label }} ({{ seg.value }})</span>
+              </div>
+              {% empty %}
+              <div class="legend-item">
+                <span class="legend-color cyan"></span>
+                <span>Sem dados</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>3</h3>
+            <div class="stat-value">{{ total_finalizadas }}</div>
+            <span class="stat-change positive">{{ taxa_finalizacao }}% de conclusão</span>
+          </div>
+          <div class="stat-icon magenta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>4</h3>
+            <div class="stat-value">{{ total_bombeiro_civil }}</div>
+            <span class="stat-change positive">{{ taxa_bombeiro_civil }}% das ocorrências</span>
+          </div>
+          <div class="stat-icon success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 13a8 8 0 0 1 16 0v3H4z" />
+              <path d="M12 5v4" />
+              <path d="M7 16v2h10v-2" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="home-panel-group">
+    <div class="card-header home-panel-header">
+      <div class="home-panel-title-wrap">
+        <h2 class="card-title-panel">Painel de Acesso de Terceiros</h2>
+      </div>
+    </div>
+
+    <section class="stats-grid stats-grid-3">
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Acessos Totais</h3>
+            <div class="stat-value">{{ total_acessos_terceiros }}</div>
+            <span class="stat-change positive">Base geral</span>
+          </div>
+          <div class="stat-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="16" rx="2" />
+              <path d="M7 8h10M7 12h10M7 16h6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Acessos do Dia</h3>
+            <div class="stat-value">{{ total_acessos_dia }}</div>
+            <span class="stat-change positive">Hoje</span>
+          </div>
+          <div class="stat-icon magenta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 2v4M16 2v4" />
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M3 10h18" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info">
+            <h3>Terceiros sem saída</h3>
+            <div class="stat-value">{{ total_terceiros_sem_saida }}</div>
+            {% if total_terceiros_sem_saida > 0 %}
+            <span class="stat-change negative">Requer atenção</span>
+            {% else %}
+            <span class="stat-change positive">Sem pendências</span>
+            {% endif %}
+          </div>
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21a8 8 0 0 0-16 0" />
+              <circle cx="12" cy="8" r="4" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+{% endblock %}

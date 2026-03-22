@@ -1,8 +1,39 @@
 .env
 .env.local
+.env.*
+!.env.example
 .venv/
 venv/
 node_modules/
 __pycache__/
 *.pyc
 db.sqlite3
+*.sqlite3
+
+# Editor and local workspace configs
+.vscode/
+.idea/
+
+# Logs and runtime files
+*.log
+logs/
+*.pid
+
+# Secrets and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+id_rsa
+id_ed25519
+secrets.*
+
+# Local backups and dumps
+*.bak
+*.tmp
+*.swp
+*.sql
+*.dump

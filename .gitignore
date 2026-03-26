@@ -1,3 +1,6 @@
+# Django migrations
+siop/migrations/
+
 .env
 .env.local
 .env.*

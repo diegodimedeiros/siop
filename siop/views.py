@@ -4,7 +4,7 @@ from django.shortcuts import render
 from core.api import api_error
 
 from .models import Ocorrencia
-from .view.acesso_terceiros import (
+from .view.vw_acesso_terceiros import (
     acesso_terceiro,
     acesso_terceiros_edit,
     acesso_terceiros_export,
@@ -14,10 +14,18 @@ from .view.acesso_terceiros import (
     acesso_terceiros_new,
     acesso_terceiros_view,
 )
-from .view.controle_bc import controle_bc
-from .view.atendimento import atendimento
-from .view.manejo import catalogo_especies_por_classe, manejo
-from .view.ocorrencias import (
+from .view.vw_controle_bc import (
+    atendimento,
+    chamado_export_view_pdf,
+    chamados,
+    chamados_manejo,
+    controle_bc,
+    flora,
+    catalogo_especies_por_classe,
+    manejo,
+    manejo_export_view_pdf,
+)
+from .view.vw_ocorrencia import (
     anexo_download,
     catalogo_areas,
     catalogo_encaminhamentos,
@@ -43,25 +51,25 @@ from .view.ocorrencias import (
 
 @login_required
 def home_view(request):
-    qs = Ocorrencia.objects.all()
-    total_ocorrencias = qs.count()
-    total_abertas = qs.filter(status=False).count()
-    total_finalizadas = qs.filter(status=True).count()
-    total_bombeiro_civil = qs.filter(bombeiro_civil=True).count()
+    queryset = Ocorrencia.objects.all()
+    total_ocorrencias = queryset.count()
+    total_abertas = queryset.filter(status=False).count()
+    total_finalizadas = queryset.filter(status=True).count()
+    total_bombeiro_civil = queryset.filter(bombeiro_civil=True).count()
     taxa_finalizacao = round((total_finalizadas / total_ocorrencias) * 100, 1) if total_ocorrencias else 0
     taxa_bombeiro_civil = round((total_bombeiro_civil / total_ocorrencias) * 100, 1) if total_ocorrencias else 0
 
     top_areas = list(
-        qs.values("area")
+        queryset.values("area")
         .annotate(total=Count("id"))
         .order_by("-total", "area")[:5]
     )
     top_naturezas = list(
-        qs.values("natureza")
+        queryset.values("natureza")
         .annotate(total=Count("id"))
         .order_by("-total", "natureza")[:5]
     )
-    recentes = qs.order_by("-data_ocorrencia")[:6]
+    recentes = queryset.order_by("-data_ocorrencia")[:6]
 
     return render(
         request,
@@ -78,16 +86,6 @@ def home_view(request):
             "ocorrencias_recentes": recentes,
         },
     )
-
-
-@login_required
-def chamados(request):
-    return render(request, "controle_bc/chamados.html")
-
-
-@login_required
-def flora(request):
-    return render(request, "controle_bc/flora.html")
 
 
 @login_required

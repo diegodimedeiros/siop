@@ -1,0 +1,153 @@
+{% load tz %}
+<div class="content-grid">
+  <section class="glass-card u-grid-span-full">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Exportar atendimentos</div>
+        <div class="card-subtitle">Filtre a listagem e exporte em CSV, XLSX ou PDF.</div>
+      </div>
+    </div>
+
+    <form method="get" action="{% url 'chamados' %}" class="form-grid u-grid-4-equal" id="controlebc-export-form" data-export-page="atendimento">
+      <input type="hidden" name="tab" value="export">
+      {% if q %}
+      <input type="hidden" name="q" value="{{ q }}">
+      {% endif %}
+
+      <div class="form-group-settings full-width">
+        <label>Local do atendimento</label>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-area-atendimento">Área</label>
+        <select id="export-area-atendimento" name="area_atendimento">
+          <option value="">Todos</option>
+          {% for area in export_areas %}
+          <option value="{{ area }}" {% if export_filters.area_atendimento == area %}selected{% endif %}>{{ area }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-local-atendimento">Local</label>
+        <select id="export-local-atendimento" name="local">
+          <option value="">Todos</option>
+          {% for local in export_locais %}
+          <option value="{{ local }}" {% if export_filters.local == local %}selected{% endif %}>{{ local }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group-settings full-width">
+        <label>Dados da ocorrência</label>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-tipo-ocorrencia">Tipo de Ocorrência</label>
+        <select id="export-tipo-ocorrencia" name="tipo_ocorrencia">
+          <option value="">Todos</option>
+          {% for tipo in export_tipos_ocorrencia %}
+          <option value="{{ tipo }}" {% if export_filters.tipo_ocorrencia == tipo %}selected{% endif %}>{{ tipo }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-primeiros-socorros">Primeiros Socorros</label>
+        <select id="export-primeiros-socorros" name="primeiros_socorros">
+          <option value="">Todos</option>
+          {% for item in export_primeiros_socorros %}
+          <option value="{{ item }}" {% if export_filters.primeiros_socorros == item %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group-settings full-width">
+        <label>Status e período</label>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-status-atendimento">Status do Atendimento</label>
+        <select id="export-status-atendimento" name="atendimento">
+          <option value="">Todos</option>
+          <option value="sim" {% if export_filters.atendimento == "sim" %}selected{% endif %}>Realizado</option>
+          <option value="nao" {% if export_filters.atendimento == "nao" %}selected{% endif %}>Pendente</option>
+        </select>
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-data-inicio-atendimento">Data/Hora inicial</label>
+        <input type="datetime-local" id="export-data-inicio-atendimento" name="data_inicio" value="{{ export_filters.data_inicio }}">
+      </div>
+
+      <div class="form-group-settings">
+        <label for="export-data-fim-atendimento">Data/Hora final</label>
+        <input type="datetime-local" id="export-data-fim-atendimento" name="data_fim" value="{{ export_filters.data_fim }}">
+      </div>
+
+      <div class="form-group-settings full-width export-actions-row">
+        <div class="btn-group export-actions-group">
+          <button class="btn btn-secondary" type="submit" id="btn-export-filtrar">Filtrar</button>
+          <button class="btn btn-danger" type="button" id="btn-export-limpar" data-clear-url="{% url 'chamados' %}?tab=export{% if q %}&q={{ q|urlencode }}{% endif %}">Limpar</button>
+          <div class="border-btn-export"><span>Extensão: </span>
+            <button class="btn btn-secondary" type="submit" id="btn-export-csv" name="export" value="csv" data-export-format="csv">CSV</button>
+            <button class="btn btn-secondary" type="submit" id="btn-export-xlsx" name="export" value="xlsx" data-export-format="xlsx">XLSX</button>
+            <button class="btn btn-secondary" type="submit" id="btn-export-pdf" name="export" value="pdf" data-export-format="pdf">PDF</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+
+<div class="u-mt-16">
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Listagem para exportação</div>
+        <div class="card-subtitle">{{ total_export_chamados }} registro{{ total_export_chamados|pluralize }} encontrado{{ total_export_chamados|pluralize }}.</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table u-data-table-tablet-fit">
+        <thead class="card-title">
+          <tr>
+            <th>ID</th>
+            <th>Data/Hora</th>
+            <th>Pessoa</th>
+            <th>Área</th>
+            <th>Local</th>
+            <th class="u-hide-tablet">Tipo de Ocorrência</th>
+            <th class="u-hide-tablet">Primeiros Socorros</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for chamado in export_chamados %}
+          <tr>
+            <td class="table-amount">{{ chamado.id }}</td>
+            <td class="u-text-center">{{ chamado.data_atendimento|localtime|date:"d/m/Y H:i" }}</td>
+            <td>{{ chamado.pessoa.nome }}</td>
+            <td>{{ chamado.area_atendimento }}</td>
+            <td>{{ chamado.local }}</td>
+            <td class="u-hide-tablet">{{ chamado.tipo_ocorrencia }}</td>
+            <td class="u-hide-tablet">{{ chamado.primeiros_socorros|default:"-" }}</td>
+            <td class="u-text-center">
+              {% if chamado.atendimentos %}
+              <span class="status-badge completed">Realizado</span>
+              {% else %}
+              <span class="status-badge pending">Pendente</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8">Nenhum atendimento encontrado para os filtros informados.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

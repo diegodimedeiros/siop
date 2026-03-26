@@ -75,6 +75,21 @@
 
                         <li class="nav-item">
                             <a href="{% url 'controle_bc' %}"
+                                class="nav-link {% block nav_achados_perdidos_active %}{% endblock %}">
+                                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M4 13a8 8 0 0 1 16 0" />
+                                    <path d="M3 13h18" />
+                                    <path d="M6 13v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2" />
+                                    <path d="M12 5v4" />
+                                    <path d="M8.5 8.5 12 9" />
+                                    <path d="M15.5 8.5 12 9" />
+                                </svg>
+                                Achados e Perdidos
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{% url 'controle_bc' %}"
                                 class="nav-link {% block nav_controlebc_active %}{% endblock %}">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M4 13a8 8 0 0 1 16 0" />
@@ -220,6 +235,38 @@
     <script src="{% static 'js/shared/geolocation.js' %}"></script>
     <script src="{% static 'js/shared/modal.js' %}"></script>
     <script src="{% static 'js/shared/feedback.js' %}"></script>
+    {% if messages %}
+    <div id="django-messages-data" hidden>
+        {% for message in messages %}
+        <div data-text="{{ message|escape }}" data-tags="{{ message.tags|default:''|escape }}"></div>
+        {% endfor %}
+    </div>
+    <script>
+        (function () {
+            const feedback = window.SIOPShared && window.SIOPShared.feedback;
+            if (!feedback || typeof feedback.show !== "function") return;
+
+            const container = document.getElementById("django-messages-data");
+            if (!container) return;
+
+            const items = Array.from(container.querySelectorAll("[data-text]")).map(function (item) {
+                return {
+                    text: item.dataset.text || "",
+                    tags: item.dataset.tags || ""
+                };
+            });
+
+            const allowedTypes = new Set(["success", "error", "warning", "info"]);
+            items.forEach(function (item) {
+                const tagList = (item.tags || "").split(/\s+/).filter(Boolean);
+                const type = tagList.find(function (tag) {
+                    return allowedTypes.has(tag);
+                }) || "info";
+                feedback.show(item.text, { type: type });
+            });
+        })();
+    </script>
+    {% endif %}
     <script src="{% static 'js/shared/signature-pad.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}

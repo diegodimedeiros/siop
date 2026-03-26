@@ -70,6 +70,14 @@
             </select>
           </div>
 
+          <div class="form-group-settings span-1">
+            <label for="recusa_atendimento">Recusa de Atendimento</label>
+            <select id="recusa_atendimento" name="recusa_atendimento">
+              <option value="false" selected>Não</option>
+              <option value="true">Sim</option>
+            </select>
+          </div>
+
           <div class="form-group-settings full-width">
             <label for="pessoa_nome">Nome Completo</label>
             <input type="text" id="pessoa_nome" name="pessoa_nome" maxlength="255" required>
@@ -80,7 +88,7 @@
           </div>
           <div class="form-group-settings">
             <label for="pessoa_orgao_emissor">Órgão Emissor</label>
-            <input type="text" id="pessoa_orgao_emissor" name="pessoa_orgao_emissor" maxlength="50">
+            <input type="text" id="pessoa_orgao_emissor" name="pessoa_orgao_emissor" maxlength="50" required>
           </div>
           <div class="form-group-settings">
             <label for="pessoa_sexo">Sexo</label>
@@ -93,11 +101,11 @@
           </div>
           <div class="form-group-settings">
             <label for="pessoa_data_nascimento">Data de Nascimento</label>
-            <input type="date" id="pessoa_data_nascimento" name="pessoa_data_nascimento">
+            <input type="date" id="pessoa_data_nascimento" name="pessoa_data_nascimento" required>
           </div>
           <div class="form-group-settings">
             <label for="pessoa_nacionalidade">Nacionalidade</label>
-            <input type="text" id="pessoa_nacionalidade" name="pessoa_nacionalidade" maxlength="50" value="Brasileira">
+            <input type="text" id="pessoa_nacionalidade" name="pessoa_nacionalidade" maxlength="50" value="Brasileira" required>
           </div>
         </div>
 
@@ -108,36 +116,40 @@
           </div>
           <div class="form-group-settings span-2">
             <label for="contato_endereco">Endereço</label>
-            <input type="text" id="contato_endereco" name="contato_endereco" maxlength="255">
+            <input type="text" id="contato_endereco" name="contato_endereco" maxlength="255" required>
           </div>
           <div class="form-group-settings">
             <label for="contato_bairro">Bairro</label>
-            <input type="text" id="contato_bairro" name="contato_bairro" maxlength="100">
+            <input type="text" id="contato_bairro" name="contato_bairro" maxlength="100" required>
           </div>
           <div class="form-group-settings">
             <label for="contato_cidade">Cidade</label>
-            <input type="text" id="contato_cidade" name="contato_cidade" maxlength="100">
+            <input type="text" id="contato_cidade" name="contato_cidade" maxlength="100" required>
           </div>
-          <div class="form-group-settings">
+          <div class="form-group-settings" id="contato_estado_group">
             <label for="contato_estado">Estado</label>
-            <select id="contato_estado" name="contato_estado">
+            <select id="contato_estado" name="contato_estado" required>
               <option value="">Selecione...</option>
               {% for uf in ufs %}
               <option value="{{ uf.sigla }}">{{ uf.sigla }} - {{ uf.nome }}</option>
               {% endfor %}
             </select>
           </div>
+          <div class="form-group-settings" id="contato_provincia_group" hidden>
+            <label for="contato_provincia">Província</label>
+            <input type="text" id="contato_provincia" name="contato_provincia" maxlength="100">
+          </div>
           <div class="form-group-settings">
             <label for="contato_pais">País</label>
-            <input type="text" id="contato_pais" name="contato_pais" maxlength="100">
+            <input type="text" id="contato_pais" name="contato_pais" maxlength="100" required>
           </div>
           <div class="form-group-settings">
             <label for="contato_telefone">Telefone</label>
-            <input type="text" id="contato_telefone" name="contato_telefone" maxlength="20">
+            <input type="text" id="contato_telefone" name="contato_telefone" maxlength="20" required>
           </div>
           <div class="form-group-settings span-2">
             <label for="contato_email">E-mail</label>
-            <input type="email" id="contato_email" name="contato_email">
+            <input type="email" id="contato_email" name="contato_email" required>
           </div>
         </div>
 
@@ -162,7 +174,7 @@
           <div class="form-group-settings">
             <label for="local">Local</label>
             <select id="local" name="local" required>
-              <option value="">Selecione a área primeiro...</option>
+              <option value="">Selecione a área primeiro...</option>              
             </select>
           </div>
           <div class="form-group-settings">
@@ -185,7 +197,7 @@
           </div>
           <div class="form-group-settings">
             <label for="atendimentos">Atendimento Realizado?</label>
-            <select id="atendimentos" name="atendimentos">
+            <select id="atendimentos" name="atendimentos" required>
               <option value="false">Não</option>
               <option value="true">Sim</option>
             </select>
@@ -212,7 +224,7 @@
           </div>
           <div class="form-group-settings">
             <label for="doenca_preexistente">Doença Preexistente?</label>
-            <select id="doenca_preexistente" name="doenca_preexistente">
+            <select id="doenca_preexistente" name="doenca_preexistente" required>
               <option value="false">Não</option>
               <option value="true">Sim</option>
             </select>
@@ -225,7 +237,7 @@
 
           <div class="form-group-settings">
             <label for="alergia">Alergia?</label>
-            <select id="alergia" name="alergia">
+            <select id="alergia" name="alergia" required>
               <option value="false">Não</option>
               <option value="true">Sim</option>
             </select>
@@ -238,7 +250,7 @@
 
           <div class="form-group-settings">
             <label for="plano_saude">Possui Plano de Saúde?</label>
-            <select id="plano_saude" name="plano_saude">
+            <select id="plano_saude" name="plano_saude" required>
               <option value="false">Não</option>
               <option value="true">Sim</option>
             </select>
@@ -263,14 +275,14 @@
           </div>
           <div class="form-group-settings">
             <label for="seguiu_passeio">Seguiu para o Passeio?</label>
-            <select id="seguiu_passeio" name="seguiu_passeio">
+            <select id="seguiu_passeio" name="seguiu_passeio" required>
               <option value="false">Não</option>
               <option value="true" selected>Sim</option>
             </select>
           </div>
           <div class="form-group-settings">
             <label for="houve_remocao">Houve Remoção?</label>
-            <select id="houve_remocao" name="houve_remocao">
+            <select id="houve_remocao" name="houve_remocao" required>
               <option value="false">Não</option>
               <option value="true">Sim</option>
             </select>
@@ -354,11 +366,6 @@
             <input type="date" id="acompanhante_data_nascimento" name="acompanhante_data_nascimento">
           </div>
 
-          <div class="form-group-settings acompanhante-group" id="acompanhante_nacionalidade_group">
-            <label for="acompanhante_nacionalidade">Nacionalidade</label>
-            <input type="text" id="acompanhante_nacionalidade" name="acompanhante_nacionalidade" maxlength="50">
-          </div>
-
           <div class="form-group-settings acompanhante-group" id="grau_parentesco_group">
             <label for="grau_parentesco">Grau de Parentesco</label>
             <input type="text" id="grau_parentesco" name="grau_parentesco" maxlength="100">
@@ -368,7 +375,7 @@
         <div class="form-grid grid-cols-2 border-radius-default u-panel-section">
           <div class="form-group-settings full-width">
             <p class="form-label">Testemunhas</p>
-            <p>Preencha apenas as testemunhas necessárias.</p>
+            <p>Preencha apenas as testemunhas necessárias, com no máximo 2 registros.</p>
           </div>
           <div class="form-group-settings">
             <label for="testemunha">Testemunhas?</label>
@@ -390,7 +397,7 @@
           </div>
           <div class="form-group-settings full-width" id="testemunhas_group_wrapper" hidden>
             <div id="testemunhas_group" hidden>
-              {% for idx in "012" %}
+              {% for idx in "01" %}
               <div id="testemunha_bloco_{{ forloop.counter0 }}" class="testemunha-card border-radius-default" {% if forloop.counter0 > 0 %}hidden{% endif %}>
                 <div class="testemunha-card-header">
                   <span class="testemunha-card-title">Testemunha {{ forloop.counter }}</span>
@@ -423,41 +430,6 @@
                     <label for="testemunha_data_{{ forloop.counter0 }}">Data de Nascimento</label>
                     <input type="date" id="testemunha_data_{{ forloop.counter0 }}"
                       name="testemunhas[{{ forloop.counter0 }}][data_nascimento]">
-                  </div>
-
-                  <div class="form-group-settings">
-                    <label for="testemunha_sexo_{{ forloop.counter0 }}">Sexo</label>
-                    <select id="testemunha_sexo_{{ forloop.counter0 }}"
-                      name="testemunhas[{{ forloop.counter0 }}][sexo]">
-                      <option value="">Selecione...</option>
-                      {% for item in sexos %}
-                      <option value="{{ item }}">{{ item }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-
-                  <div class="form-group-settings">
-                    <label for="testemunha_nacionalidade_{{ forloop.counter0 }}">Nacionalidade</label>
-                    <input type="text" id="testemunha_nacionalidade_{{ forloop.counter0 }}"
-                      name="testemunhas[{{ forloop.counter0 }}][nacionalidade]" maxlength="50">
-                  </div>
-
-                  <div class="form-group-settings">
-                    <label for="testemunha_endereco_{{ forloop.counter0 }}">Endereço</label>
-                    <input type="text" id="testemunha_endereco_{{ forloop.counter0 }}"
-                      name="testemunhas[{{ forloop.counter0 }}][endereco]" maxlength="255">
-                  </div>
-
-                  <div class="form-group-settings">
-                    <label for="testemunha_cidade_{{ forloop.counter0 }}">Cidade</label>
-                    <input type="text" id="testemunha_cidade_{{ forloop.counter0 }}"
-                      name="testemunhas[{{ forloop.counter0 }}][cidade]" maxlength="100">
-                  </div>
-
-                  <div class="form-group-settings">
-                    <label for="testemunha_pais_{{ forloop.counter0 }}">País</label>
-                    <input type="text" id="testemunha_pais_{{ forloop.counter0 }}"
-                      name="testemunhas[{{ forloop.counter0 }}][pais]" maxlength="100">
                   </div>
                 </div>
               </div>
@@ -532,7 +504,7 @@
           <div class="form-group-settings full-width">
             <p class="form-label">Assinatura do Atendido</p>
             <input type="hidden" id="assinatura_atendido" name="assinatura_atendido">
-            <div class="glass-card upload-panel-card">
+            <div id="assinatura_panel_card" class="glass-card upload-panel-card">
               <div class="upload-panel-controls">
                 <button type="button" id="btn-assinatura-modal" class="btn btn-secondary file-trigger-button btn-font-default">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"
@@ -581,130 +553,5 @@
 {% block extra_js %}
 {{ block.super }}
 {{ locais_por_area|json_script:"locais-por-area" }}
-<script src="{% static 'js/controlebc-atendimento.js' %}?v=4"></script>
-<script>
-  (function () {
-    const testemunhaSelect = document.getElementById("testemunha");
-    const addTestemunhaWrapper = document.getElementById("add_testemunha_wrapper");
-    const addTestemunhaButton = document.getElementById("add_testemunha_btn");
-    const testemunhasGroupWrapper = document.getElementById("testemunhas_group_wrapper");
-    const testemunhasGroup = document.getElementById("testemunhas_group");
-    const blocks = [
-      document.getElementById("testemunha_bloco_0"),
-      document.getElementById("testemunha_bloco_1"),
-      document.getElementById("testemunha_bloco_2")
-    ].filter(Boolean);
-
-    function isTrue(value) {
-      return String(value).toLowerCase() === "true";
-    }
-
-    function setVisible(element, visible) {
-      if (!element) return;
-      element.hidden = !visible;
-      element.style.display = visible ? "" : "none";
-    }
-
-    function syncWitnessBlocks() {
-      if (!testemunhaSelect || !blocks.length) return;
-
-      const enabled = isTrue(testemunhaSelect.value);
-      setVisible(addTestemunhaWrapper, enabled);
-      setVisible(testemunhasGroupWrapper, enabled);
-      setVisible(testemunhasGroup, enabled);
-
-      if (!enabled) {
-        blocks.forEach(function (block, index) {
-          block.hidden = index > 0;
-          block.style.display = index === 0 ? "" : "none";
-          block.querySelectorAll("input, select, textarea").forEach(function (control) {
-            control.disabled = true;
-            if (control.tagName === "SELECT") {
-              control.selectedIndex = 0;
-            } else {
-              control.value = "";
-            }
-          });
-        });
-        if (addTestemunhaButton) addTestemunhaButton.disabled = true;
-        document.querySelectorAll(".remove_testemunha_btn").forEach(function (button) {
-          button.hidden = true;
-          button.disabled = true;
-        });
-        return;
-      }
-
-      blocks.forEach(function (block, index) {
-        const visible = index === 0 || !block.hidden;
-        block.style.display = visible ? "" : "none";
-        block.querySelectorAll("input, select, textarea").forEach(function (control) {
-          control.disabled = !visible;
-        });
-      });
-
-      blocks[0].hidden = false;
-      blocks[0].style.display = "";
-      blocks[0].querySelectorAll("input, select, textarea").forEach(function (control) {
-        control.disabled = false;
-      });
-
-      if (addTestemunhaButton) {
-        const hasHiddenBlock = blocks.slice(1).some(function (block) {
-          return block.hidden;
-        });
-        addTestemunhaButton.disabled = false;
-        addTestemunhaWrapper.hidden = false;
-        addTestemunhaWrapper.style.display = hasHiddenBlock ? "" : "none";
-      }
-
-      document.querySelectorAll(".remove_testemunha_btn").forEach(function (button) {
-        const targetId = button.getAttribute("data-target");
-        const targetBlock = targetId ? document.getElementById(targetId) : null;
-        const visible = Boolean(targetBlock) && !targetBlock.hidden;
-        button.hidden = !visible;
-        button.disabled = !visible;
-      });
-    }
-
-    if (testemunhaSelect) {
-      testemunhaSelect.addEventListener("change", syncWitnessBlocks);
-    }
-
-    if (addTestemunhaButton) {
-      addTestemunhaButton.addEventListener("click", function () {
-        const nextHiddenBlock = blocks.slice(1).find(function (block) {
-          return block.hidden;
-        });
-        if (!nextHiddenBlock) return;
-        nextHiddenBlock.hidden = false;
-        nextHiddenBlock.style.display = "";
-        nextHiddenBlock.querySelectorAll("input, select, textarea").forEach(function (control) {
-          control.disabled = false;
-        });
-        syncWitnessBlocks();
-      });
-    }
-
-    document.querySelectorAll(".remove_testemunha_btn").forEach(function (button) {
-      button.addEventListener("click", function () {
-        const targetId = button.getAttribute("data-target");
-        const targetBlock = targetId ? document.getElementById(targetId) : null;
-        if (!targetBlock) return;
-        targetBlock.hidden = true;
-        targetBlock.style.display = "none";
-        targetBlock.querySelectorAll("input, select, textarea").forEach(function (control) {
-          control.disabled = true;
-          if (control.tagName === "SELECT") {
-            control.selectedIndex = 0;
-          } else {
-            control.value = "";
-          }
-        });
-        syncWitnessBlocks();
-      });
-    });
-
-    syncWitnessBlocks();
-  })();
-</script>
+<script src="{% static 'js/controlebc-atendimento.js' %}?v=12"></script>
 {% endblock %}

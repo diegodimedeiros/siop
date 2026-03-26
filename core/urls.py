@@ -50,6 +50,9 @@ urlpatterns = [
     # Controle BC
     path("controlebc/", views.controle_bc, name="controle_bc"),
     path("controlebc/chamados/", views.chamados, name="chamados"),
+    path("controlebc/chamados/<int:pk>/export/pdf-view/", views.chamado_export_view_pdf, name="chamado_export_view_pdf"),
+    path("controlebc/chamados-manejo/", views.chamados_manejo, name="chamados_manejo"),
+    path("controlebc/chamados-manejo/<int:pk>/export/pdf-view/", views.manejo_export_view_pdf, name="manejo_export_view_pdf"),
     path("controlebc/atendimento/", views.atendimento, name="atendimento"),
     path("controlebc/manejo/", views.manejo, name="manejo"),
     path("controlebc/flora/", views.flora, name="flora"),

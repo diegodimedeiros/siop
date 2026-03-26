@@ -1,6 +1,7 @@
 import base64
 import binascii
 import re
+import uuid
 from datetime import datetime
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
@@ -21,7 +22,7 @@ from siop.models import (
 
 
 TESTEMUNHA_KEY_RE = re.compile(
-    r"^testemunhas\[(\d+)\]\[(nome|documento|telefone|data_nascimento|sexo|nacionalidade|endereco|cidade|pais)\]$"
+    r"^testemunhas\[(\d+)\]\[(nome|documento|telefone|data_nascimento)\]$"
 )
 
 
@@ -193,21 +194,6 @@ def _raise_service_validation(exc):
     )
 
 
-def _has_any_contact_value(data):
-    return any(
-        _normalize_text(data.get(field))
-        for field in (
-            "contato_endereco",
-            "contato_bairro",
-            "contato_cidade",
-            "contato_estado",
-            "contato_pais",
-            "contato_telefone",
-            "contato_email",
-        )
-    )
-
-
 def _get_or_create_pessoa(*, nome, documento, orgao_emissor, sexo, data_nascimento, nacionalidade):
     pessoa = Pessoa.objects.filter(documento=documento).order_by("id").first()
     if pessoa is None:
@@ -237,18 +223,60 @@ def _get_or_create_pessoa(*, nome, documento, orgao_emissor, sexo, data_nascimen
     return pessoa
 
 
+def _build_acompanhante_documento(value):
+    documento = _normalize_optional_text(value)
+    if documento:
+        return documento
+    return f"ACOMP-{uuid.uuid4().hex[:12].upper()}"
+
+
 def _build_contato_from_request(data):
-    if not _has_any_contact_value(data):
-        return None
+    tipo_pessoa = _normalize_text(data.get("tipo_pessoa")).lower()
+    estrangeiro = "estrangeiro" in tipo_pessoa
+    endereco = _normalize_text(data.get("contato_endereco"))
+    bairro = _normalize_text(data.get("contato_bairro"))
+    cidade = _normalize_text(data.get("contato_cidade"))
+    estado = _normalize_text(data.get("contato_estado"))
+    provincia = _normalize_text(data.get("contato_provincia"))
+    pais = _normalize_text(data.get("contato_pais"))
+    telefone = _normalize_text(data.get("contato_telefone"))
+    email = _normalize_text(data.get("contato_email"))
+
+    details = {}
+    if not endereco:
+        details["contato_endereco"] = "Campo obrigatório."
+    if not bairro:
+        details["contato_bairro"] = "Campo obrigatório."
+    if not cidade:
+        details["contato_cidade"] = "Campo obrigatório."
+    if estrangeiro:
+        if not provincia:
+            details["contato_provincia"] = "Campo obrigatório."
+    elif not estado:
+        details["contato_estado"] = "Campo obrigatório."
+    if not pais:
+        details["contato_pais"] = "Campo obrigatório."
+    if not telefone:
+        details["contato_telefone"] = "Campo obrigatório."
+    if not email:
+        details["contato_email"] = "Campo obrigatório."
+
+    if details:
+        raise ServiceError(
+            code="validation_error",
+            message="Campos inválidos.",
+            details=details,
+        )
 
     return Contato.objects.create(
-        endereco=_normalize_optional_text(data.get("contato_endereco")),
-        bairro=_normalize_optional_text(data.get("contato_bairro")),
-        cidade=_normalize_optional_text(data.get("contato_cidade")),
-        estado=_normalize_optional_text(data.get("contato_estado")),
-        pais=_normalize_optional_text(data.get("contato_pais")),
-        telefone=_normalize_optional_text(data.get("contato_telefone")),
-        email=_normalize_optional_text(data.get("contato_email")),
+        endereco=endereco,
+        bairro=bairro,
+        cidade=cidade,
+        estado=estado or None,
+        provincia=provincia or None,
+        pais=pais,
+        telefone=telefone,
+        email=email,
     )
 
 
@@ -262,6 +290,13 @@ def _parse_testemunhas(data):
         grouped.setdefault(idx, {})[field] = _normalize_text(value)
 
     testemunhas = []
+    if len(grouped) > 2:
+        raise ServiceError(
+            code="validation_error",
+            message="Campos inválidos.",
+            details={"testemunhas": "É permitido informar no máximo 2 testemunhas."},
+        )
+
     for idx in sorted(grouped.keys(), key=int):
         item = grouped[idx]
         has_any_value = any(item.values())
@@ -270,28 +305,29 @@ def _parse_testemunhas(data):
 
         nome = item.get("nome", "")
         documento = item.get("documento", "")
-        if not nome or not documento:
+        telefone = item.get("telefone", "")
+        data_nascimento_raw = item.get("data_nascimento", "")
+        if not nome or not documento or not telefone or not data_nascimento_raw:
             raise ServiceError(
                 code="validation_error",
                 message="Campos inválidos.",
-                details={"testemunhas": f"Testemunha {int(idx) + 1}: nome e documento são obrigatórios."},
+                details={
+                    "testemunhas": (
+                        f"Testemunha {int(idx) + 1}: nome, documento, telefone e data de nascimento são obrigatórios."
+                    )
+                },
             )
 
         testemunhas.append(
             {
                 "nome": nome,
                 "documento": documento,
-                "telefone": item.get("telefone") or None,
+                "telefone": telefone,
                 "data_nascimento": _parse_date(
-                    item.get("data_nascimento"),
+                    data_nascimento_raw,
                     field_name=f"testemunhas[{idx}][data_nascimento]",
-                    required=False,
+                    required=True,
                 ),
-                "sexo": item.get("sexo") or None,
-                "nacionalidade": item.get("nacionalidade") or None,
-                "endereco": item.get("endereco") or None,
-                "cidade": item.get("cidade") or None,
-                "pais": item.get("pais") or None,
             }
         )
 
@@ -307,16 +343,11 @@ def _create_testemunhas(*, atendimento, data):
     for item in testemunhas_payload:
         contato = Contato.objects.create(
             telefone=item["telefone"],
-            endereco=item["endereco"],
-            cidade=item["cidade"],
-            pais=item["pais"],
         )
         testemunha = Testemunha.objects.create(
             nome=item["nome"],
             documento=item["documento"],
-            sexo=item["sexo"],
             data_nascimento=item["data_nascimento"],
-            nacionalidade=item["nacionalidade"],
             contato=contato,
         )
         testemunha_ids.append(testemunha.id)
@@ -327,19 +358,33 @@ def _create_testemunhas(*, atendimento, data):
 def _build_payload(data):
     details = {}
 
+    tipo_pessoa = _normalize_text(data.get("tipo_pessoa"))
     pessoa_nome = _normalize_text(data.get("pessoa_nome"))
     pessoa_documento = _normalize_text(data.get("pessoa_documento"))
+    pessoa_orgao_emissor = _normalize_text(data.get("pessoa_orgao_emissor"))
     pessoa_sexo = _normalize_text(data.get("pessoa_sexo"))
+    pessoa_nacionalidade = _normalize_text(data.get("pessoa_nacionalidade"))
+    atendimentos_raw = _normalize_text(data.get("atendimentos"))
+    doenca_preexistente_raw = _normalize_text(data.get("doenca_preexistente"))
+    alergia_raw = _normalize_text(data.get("alergia"))
+    plano_saude_raw = _normalize_text(data.get("plano_saude"))
     responsavel_atendimento = _normalize_text(data.get("responsavel_atendimento"))
+    recusa_atendimento = to_bool(data.get("recusa_atendimento"))
 
+    if not tipo_pessoa:
+        details["tipo_pessoa"] = "Campo obrigatório."
     if not pessoa_nome:
         details["pessoa_nome"] = "Campo obrigatório."
     if not pessoa_documento:
         details["pessoa_documento"] = "Campo obrigatório."
-    if not _normalize_text(data.get("tipo_pessoa")):
-        details["tipo_pessoa"] = "Campo obrigatório."
+    if not pessoa_orgao_emissor:
+        details["pessoa_orgao_emissor"] = "Campo obrigatório."
     if not pessoa_sexo:
         details["pessoa_sexo"] = "Campo obrigatório."
+    if not _normalize_text(data.get("pessoa_data_nascimento")):
+        details["pessoa_data_nascimento"] = "Campo obrigatório."
+    if not pessoa_nacionalidade:
+        details["pessoa_nacionalidade"] = "Campo obrigatório."
     if not _normalize_text(data.get("area_atendimento")):
         details["area_atendimento"] = "Campo obrigatório."
     if not _normalize_text(data.get("local")):
@@ -348,17 +393,50 @@ def _build_payload(data):
         details["tipo_ocorrencia"] = "Campo obrigatório."
     if not responsavel_atendimento:
         details["responsavel_atendimento"] = "Campo obrigatório."
+    if not atendimentos_raw:
+        details["atendimentos"] = "Campo obrigatório."
     if not _normalize_text(data.get("descricao")):
         details["descricao"] = "Campo obrigatório."
+    if not doenca_preexistente_raw:
+        details["doenca_preexistente"] = "Campo obrigatório."
+    if not alergia_raw:
+        details["alergia"] = "Campo obrigatório."
+    if not plano_saude_raw:
+        details["plano_saude"] = "Campo obrigatório."
 
     possui_acompanhante = to_bool(data.get("possui_acompanhante"))
+    doenca_preexistente = to_bool(data.get("doenca_preexistente"))
+    alergia = to_bool(data.get("alergia"))
+    plano_saude = to_bool(data.get("plano_saude"))
     acompanhante_nome = _normalize_text(data.get("acompanhante_nome"))
-    acompanhante_documento = _normalize_text(data.get("acompanhante_documento"))
+    acompanhante_documento = _normalize_optional_text(data.get("acompanhante_documento"))
+    grau_parentesco = _normalize_text(data.get("grau_parentesco"))
     if possui_acompanhante:
         if not acompanhante_nome:
             details["acompanhante_nome"] = "Campo obrigatório."
-        if not acompanhante_documento:
-            details["acompanhante_documento"] = "Campo obrigatório."
+        if not grau_parentesco:
+            details["grau_parentesco"] = "Campo obrigatório."
+
+    atendimento_realizado = to_bool(data.get("atendimentos"))
+    houve_remocao = to_bool(data.get("houve_remocao"))
+    assinatura_atendido = _normalize_text(data.get("assinatura_atendido"))
+    if not recusa_atendimento and not assinatura_atendido:
+        details["assinatura_atendido"] = "Campo obrigatório."
+    if atendimento_realizado and not _normalize_text(data.get("primeiros_socorros")):
+        details["primeiros_socorros"] = "Campo obrigatório."
+    if doenca_preexistente and not _normalize_text(data.get("descricao_doenca")):
+        details["descricao_doenca"] = "Campo obrigatório."
+    if alergia and not _normalize_text(data.get("descricao_alergia")):
+        details["descricao_alergia"] = "Campo obrigatório."
+    if plano_saude and not _normalize_text(data.get("nome_plano_saude")):
+        details["nome_plano_saude"] = "Campo obrigatório."
+    if houve_remocao:
+        if not _normalize_text(data.get("transporte")):
+            details["transporte"] = "Campo obrigatório."
+        if not _normalize_text(data.get("encaminhamento")):
+            details["encaminhamento"] = "Campo obrigatório."
+        if not _normalize_text(data.get("hospital")):
+            details["hospital"] = "Campo obrigatório."
 
     if details:
         raise ServiceError(
@@ -368,17 +446,17 @@ def _build_payload(data):
         )
 
     return {
-        "tipo_pessoa": _normalize_text(data.get("tipo_pessoa")),
+        "tipo_pessoa": tipo_pessoa,
         "pessoa_nome": pessoa_nome,
         "pessoa_documento": pessoa_documento,
-        "pessoa_orgao_emissor": _normalize_optional_text(data.get("pessoa_orgao_emissor")),
+        "pessoa_orgao_emissor": pessoa_orgao_emissor,
         "pessoa_sexo": pessoa_sexo,
         "pessoa_data_nascimento": _parse_date(
             data.get("pessoa_data_nascimento"),
             field_name="pessoa_data_nascimento",
-            required=False,
+            required=True,
         ),
-        "pessoa_nacionalidade": _normalize_optional_text(data.get("pessoa_nacionalidade")),
+        "pessoa_nacionalidade": pessoa_nacionalidade,
         "data_atendimento": parse_local_datetime(
             data.get("data_atendimento"),
             field_name="data_atendimento",
@@ -388,18 +466,19 @@ def _build_payload(data):
         "local": _normalize_text(data.get("local")),
         "tipo_ocorrencia": _normalize_text(data.get("tipo_ocorrencia")),
         "responsavel_atendimento": responsavel_atendimento,
-        "atendimentos": to_bool(data.get("atendimentos")),
+        "atendimentos": atendimento_realizado,
+        "recusa_atendimento": recusa_atendimento,
         "primeiros_socorros": _normalize_optional_text(data.get("primeiros_socorros")),
         "descricao": _normalize_text(data.get("descricao")),
-        "doenca_preexistente": to_bool(data.get("doenca_preexistente")),
+        "doenca_preexistente": doenca_preexistente,
         "descricao_doenca": _normalize_optional_text(data.get("descricao_doenca")),
-        "alergia": to_bool(data.get("alergia")),
+        "alergia": alergia,
         "descricao_alergia": _normalize_optional_text(data.get("descricao_alergia")),
-        "plano_saude": to_bool(data.get("plano_saude")),
+        "plano_saude": plano_saude,
         "nome_plano_saude": _normalize_optional_text(data.get("nome_plano_saude")),
         "numero_carteirinha": _normalize_optional_text(data.get("numero_carteirinha")),
         "seguiu_passeio": to_bool(data.get("seguiu_passeio")),
-        "houve_remocao": to_bool(data.get("houve_remocao")),
+        "houve_remocao": houve_remocao,
         "transporte": _normalize_optional_text(data.get("transporte")),
         "encaminhamento": _normalize_optional_text(data.get("encaminhamento")),
         "hospital": _normalize_optional_text(data.get("hospital")),
@@ -407,7 +486,7 @@ def _build_payload(data):
         "crm": _normalize_optional_text(data.get("crm")),
         "possui_acompanhante": possui_acompanhante,
         "acompanhante_nome": acompanhante_nome or None,
-        "acompanhante_documento": acompanhante_documento or None,
+        "acompanhante_documento": _build_acompanhante_documento(acompanhante_documento) if possui_acompanhante else None,
         "acompanhante_orgao_emissor": _normalize_optional_text(data.get("acompanhante_orgao_emissor")),
         "acompanhante_sexo": _normalize_optional_text(data.get("acompanhante_sexo")),
         "acompanhante_data_nascimento": _parse_date(
@@ -415,8 +494,8 @@ def _build_payload(data):
             field_name="acompanhante_data_nascimento",
             required=False,
         ),
-        "acompanhante_nacionalidade": _normalize_optional_text(data.get("acompanhante_nacionalidade")),
-        "grau_parentesco": _normalize_optional_text(data.get("grau_parentesco")),
+        "acompanhante_nacionalidade": None,
+        "grau_parentesco": grau_parentesco or None,
         "geo_latitude": _parse_decimal_7(data.get("geo_latitude"), field_name="geo_latitude"),
         "geo_longitude": _parse_decimal_7(data.get("geo_longitude"), field_name="geo_longitude"),
     }
@@ -468,6 +547,7 @@ def create_atendimento(*, data, files, user):
             numero_carteirinha=payload["numero_carteirinha"],
             primeiros_socorros=payload["primeiros_socorros"],
             atendimentos=payload["atendimentos"],
+            recusa_atendimento=payload["recusa_atendimento"],
             responsavel_atendimento=payload["responsavel_atendimento"],
             seguiu_passeio=payload["seguiu_passeio"],
             houve_remocao=payload["houve_remocao"],

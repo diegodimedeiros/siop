@@ -48,7 +48,7 @@ def manejo(request):
 
     return render(
         request,
-        "controle_bc/manejo.html",
+        "controle_bc/manejo/manejo.html",
         {
             "classes_fauna": catalogo_fauna_data(),
             "areas_captura": catalogo_areas_data(),

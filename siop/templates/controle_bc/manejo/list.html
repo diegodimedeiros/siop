@@ -1,0 +1,74 @@
+{% load tz %}
+<div>
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Lista de Manejos</div>
+        <div class="card-subtitle">Selecione um registro para visualizar os detalhes.</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead class="card-title">
+          <tr>
+            <th>ID</th>
+            <th>Data/Hora</th>
+            <th>Classe</th>
+            <th>Nome Popular</th>
+            <th>Área</th>
+            <th>Local</th>
+            <th>Responsável</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for manejo in page_obj %}
+          <tr class="controlebc-record-row u-pointer" tabindex="0" role="button"
+            aria-label="Visualizar manejo {{ manejo.id }}"
+            data-view-url="{% url 'chamados_manejo' %}?id={{ manejo.id }}&tab=view{% if q %}&q={{ q|urlencode }}{% endif %}">
+            <td class="table-amount">{{ manejo.id }}</td>
+            <td class="u-text-center">{{ manejo.data_hora|localtime|date:"d/m/Y H:i" }}</td>
+            <td>{{ manejo.classe }}</td>
+            <td>{{ manejo.nome_popular|default:"-" }}</td>
+            <td>{{ manejo.area_captura }}</td>
+            <td>{{ manejo.local_captura }}</td>
+            <td>{{ manejo.responsavel_manejo|default:"-" }}</td>
+            <td class="u-text-center">
+              {% if manejo.realizado_manejo %}
+              <span class="status-badge completed">Realizado</span>
+              {% else %}
+              <span class="status-badge pending">Pendente</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8">Nenhum manejo encontrado.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+      <a class="pagination-btn" href="?page=1{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Primeira</a>
+      <a class="pagination-btn" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Anterior</a>
+      {% else %}
+      <span class="pagination-btn disabled">Primeira</span>
+      <span class="pagination-btn disabled">Anterior</span>
+      {% endif %}
+
+      <span class="pagination-info">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+      <a class="pagination-btn" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Próxima</a>
+      <a class="pagination-btn" href="?page={{ page_obj.paginator.num_pages }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Última</a>
+      {% else %}
+      <span class="pagination-btn disabled">Próxima</span>
+      <span class="pagination-btn disabled">Última</span>
+      {% endif %}
+    </div>
+  </section>
+</div>

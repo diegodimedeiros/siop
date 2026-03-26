@@ -1,0 +1,97 @@
+{% load tz %}
+<div class="content-grid">
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Informações do Manejo{% if selected_manejo %} #{{ selected_manejo.id }}{% endif %}</div>
+      </div>
+      <div class="card-actions">
+        {% if selected_manejo %}
+          {% if selected_manejo.realizado_manejo %}
+          <span class="status-badge completed">Realizado</span>
+          {% else %}
+          <span class="status-badge pending">Pendente</span>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if selected_manejo %}
+    <div class="form-grid u-grid-2-equal">
+      <div class="form-group-settings">
+        <label>ID</label>
+        <input type="text" value="{{ selected_manejo.id }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Data e Hora</label>
+        <input type="text" value="{{ selected_manejo.data_hora|localtime|date:'d/m/Y H:i' }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Classe</label>
+        <input type="text" value="{{ selected_manejo.classe }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Nome Popular</label>
+        <input type="text" value="{{ selected_manejo.nome_popular|default:'-' }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Área</label>
+        <input type="text" value="{{ selected_manejo.area_captura }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Local</label>
+        <input type="text" value="{{ selected_manejo.local_captura }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Responsável</label>
+        <input type="text" value="{{ selected_manejo.responsavel_manejo|default:'-' }}" disabled>
+      </div>
+      <div class="form-group-settings">
+        <label>Manejo Realizado</label>
+        <input type="text" value="{% if selected_manejo.realizado_manejo %}Sim{% else %}Não{% endif %}" disabled>
+      </div>
+      <div class="form-group-settings full-width">
+        <label>Observações</label>
+        <textarea disabled>{{ selected_manejo.observacoes }}</textarea>
+      </div>
+    </div>
+    {% else %}
+    <div class="u-text-muted">Nenhum manejo selecionado.</div>
+    {% endif %}
+  </section>
+
+  <aside class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Ações</div>
+      </div>
+    </div>
+    <div class="btn-group u-btn-group-column">
+      <a class="btn btn-secondary {% if not selected_manejo %}disabled{% endif %}"
+        {% if selected_manejo %}href="{% url 'manejo_export_view_pdf' selected_manejo.id %}"{% else %}aria-disabled="true"{% endif %}
+        id="btn-view-export-pdf">
+        Exportar PDF
+      </a>
+      <a class="btn btn-danger" href="{% url 'chamados_manejo' %}?tab=list{% if q %}&q={{ q|urlencode }}{% endif %}">
+        Cancelar
+      </a>
+    </div>
+    <div class="u-mt-22">
+      <div class="card-title">Resumo</div>
+    </div>
+    <div class="u-meta-stack">
+      <div>
+        <span class="u-text-muted">Total de manejos</span><br>
+        <span>{{ total_manejos }}</span>
+      </div>
+      <div>
+        <span class="u-text-muted">Realizados</span><br>
+        <span>{{ total_realizados }}</span>
+      </div>
+      <div>
+        <span class="u-text-muted">Pendentes</span><br>
+        <span>{{ total_pendentes }}</span>
+      </div>
+    </div>
+  </aside>
+</div>

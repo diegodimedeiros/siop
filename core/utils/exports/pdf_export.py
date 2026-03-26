@@ -41,6 +41,9 @@ def draw_pdf_page_chrome(
     generated_by,
     generated_at=None,
     hash_cadastro=None,
+    footer_suffix=None,
+    footer_on_two_lines=False,
+    header_subtitle=None,
 ):
     from reportlab.lib.utils import ImageReader
 
@@ -93,6 +96,9 @@ def draw_pdf_page_chrome(
         title_y,
         "SIOP - Sistema de Inteligência e Operações",
     )
+    if header_subtitle:
+        canvas.setFont("Helvetica", 10)
+        canvas.drawCentredString(page_width / 2, title_y - 16, header_subtitle)
 
     canvas.setFillColorRGB(*green)
     canvas.rect(0, 0, page_width, 42, stroke=0, fill=1)
@@ -101,10 +107,18 @@ def draw_pdf_page_chrome(
     canvas.setFont("Helvetica", 7)
 
     generated_text = f"Gerado em {generated_at.strftime('%d/%m/%Y %H:%M')} por {generated_by}"
-    if hash_cadastro:
-        generated_text = f"{generated_text} | Hash Atendimento: {hash_cadastro}"
-
-    canvas.drawRightString(page_width - 24, 56, generated_text)
+    if footer_on_two_lines and hash_cadastro:
+        hash_text = f"Hash Atendimento: {hash_cadastro}"
+        if footer_suffix:
+            hash_text = f"{hash_text} {footer_suffix}"
+        canvas.drawRightString(page_width - 24, 62, generated_text)
+        canvas.drawRightString(page_width - 24, 52, hash_text)
+    else:
+        if hash_cadastro:
+            generated_text = f"{generated_text} | Hash Atendimento: {hash_cadastro}"
+        if footer_suffix:
+            generated_text = f"{generated_text} {footer_suffix}"
+        canvas.drawRightString(page_width - 24, 56, generated_text)
 
     path_bottom = canvas.beginPath()
     path_bottom.moveTo(0, 47)

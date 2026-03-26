@@ -36,7 +36,7 @@
     openModal(modal);
   }
 
-  function consumeExportError(context) {
+  function consumeExportError() {
     const url = new URL(window.location.href);
     const message = (url.searchParams.get('export_error') || '').trim();
     if (!message) return;
@@ -55,7 +55,7 @@
   }
 
   function init(context) {
-    consumeExportError(context);
+    consumeExportError();
   }
 
   feedback.showModal = showModal;

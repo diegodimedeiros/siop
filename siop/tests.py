@@ -4,7 +4,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import AcessoTerceiros, Ocorrencia, Pessoa
+from .models import AcessoTerceiros, ControleAtendimento, Geolocalizacao, Manejo, Ocorrencia, Pessoa
 
 
 class CriticalFlowSmokeTests(TestCase):
@@ -428,3 +428,144 @@ class CriticalFlowSmokeTests(TestCase):
                 body = response.json()
                 self.assertFalse(body["ok"])
                 self.assertEqual(body["error"]["code"], "method_not_allowed")
+
+    def test_atendimento_create_returns_success_and_persists(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("atendimento"),
+            data={
+                "tipo_pessoa": "VISITANTE",
+                "pessoa_nome": "Atendido Teste",
+                "pessoa_documento": "11122233344",
+                "pessoa_orgao_emissor": "SSP",
+                "pessoa_sexo": "M",
+                "pessoa_data_nascimento": "1990-05-10",
+                "pessoa_nacionalidade": "Brasileira",
+                "data_atendimento": "2026-03-22T19:00",
+                "area_atendimento": "AREA 3",
+                "local": "LOCAL 3",
+                "tipo_ocorrencia": "MAL ESTAR",
+                "responsavel_atendimento": "Equipe BC",
+                "descricao": "Atendimento criado via teste.",
+                "atendimentos": "on",
+                "primeiros_socorros": "Curativo",
+                "doenca_preexistente": "false",
+                "alergia": "false",
+                "plano_saude": "false",
+                "contato_endereco": "Rua Teste",
+                "contato_bairro": "Centro",
+                "contato_cidade": "Penha",
+                "contato_estado": "SC",
+                "contato_pais": "Brasil",
+                "contato_telefone": "47999990000",
+                "contato_email": "atendido@example.com",
+                "geo_latitude": "-26.7688890",
+                "geo_longitude": "-48.6452780",
+            },
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertIn("id", payload["data"])
+
+        created = ControleAtendimento.objects.select_related("pessoa", "contato").get(pk=payload["data"]["id"])
+        self.assertEqual(created.tipo_pessoa, "VISITANTE")
+        self.assertEqual(created.pessoa.nome, "Atendido Teste")
+        self.assertEqual(created.pessoa.documento, "11122233344")
+        self.assertEqual(created.area_atendimento, "AREA 3")
+        self.assertEqual(created.local, "LOCAL 3")
+        self.assertEqual(created.tipo_ocorrencia, "MAL ESTAR")
+        self.assertEqual(created.responsavel_atendimento, "Equipe BC")
+        self.assertTrue(created.atendimentos)
+        self.assertEqual(created.primeiros_socorros, "Curativo")
+        self.assertIsNotNone(created.contato)
+        self.assertEqual(created.contato.bairro, "Centro")
+        self.assertEqual(created.criado_por, self.user)
+        self.assertTrue(
+            Geolocalizacao.objects.filter(object_id=created.id).exists()
+        )
+
+    def test_atendimento_create_returns_validation_error_when_required_fields_missing(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("atendimento"),
+            data={
+                "tipo_pessoa": "VISITANTE",
+                "pessoa_nome": "Sem Dados",
+            },
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 422)
+        payload = response.json()
+        self.assertFalse(payload["ok"])
+        self.assertEqual(payload["error"]["code"], "validation_error")
+        self.assertIn("pessoa_documento", payload["error"]["details"])
+        self.assertIn("area_atendimento", payload["error"]["details"])
+        self.assertIn("descricao", payload["error"]["details"])
+
+    def test_manejo_create_returns_success_and_persists(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("manejo"),
+            data={
+                "data_hora": "2026-03-22T20:00",
+                "classe": "REPTIL",
+                "nome_popular": "Jiboia",
+                "area_captura": "AREA 4",
+                "local_captura": "LOCAL 4",
+                "descricao_local": "Próximo à trilha",
+                "realizado_manejo": "on",
+                "responsavel_manejo": "Equipe Fauna",
+                "descricao_local_soltura": "",
+                "motivo_acionamento": "Animal em área de circulação",
+                "observacoes": "Manejo criado via teste.",
+                "latitude_captura": "-26.768889",
+                "longitude_captura": "-48.645278",
+            },
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertIn("id", payload["data"])
+
+        created = Manejo.objects.get(pk=payload["data"]["id"])
+        self.assertEqual(created.classe, "REPTIL")
+        self.assertEqual(created.nome_popular, "Jiboia")
+        self.assertEqual(created.area_captura, "AREA 4")
+        self.assertEqual(created.local_captura, "LOCAL 4")
+        self.assertTrue(created.realizado_manejo)
+        self.assertEqual(created.responsavel_manejo, "Equipe Fauna")
+        self.assertEqual(created.criado_por, self.user)
+        self.assertTrue(Geolocalizacao.objects.filter(object_id=created.id, tipo="captura").exists())
+
+    def test_manejo_create_requires_responsavel_when_realizado(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("manejo"),
+            data={
+                "data_hora": "2026-03-22T20:10",
+                "classe": "MAMIFERO",
+                "area_captura": "AREA 5",
+                "local_captura": "LOCAL 5",
+                "descricao_local": "Base da trilha",
+                "realizado_manejo": "on",
+                "motivo_acionamento": "Animal em risco",
+                "observacoes": "Sem responsável.",
+            },
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 422)
+        payload = response.json()
+        self.assertFalse(payload["ok"])
+        self.assertEqual(payload["error"]["code"], "validation_error")
+        self.assertIn("responsavel_manejo", payload["error"]["details"])

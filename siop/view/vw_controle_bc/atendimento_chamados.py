@@ -35,6 +35,7 @@ from core.utils.formatters import (
 from core.utils.helpers import (
     anexos_total as _anexos_total,
     assinatura_status as _assinatura_status,
+    build_rows as _build_rows,
     first_geolocalizacao_text as _first_geolocalizacao_text,
 )
 from controlebc.models import ControleAtendimento
@@ -210,6 +211,7 @@ def export_controlebc_chamados_pdf(request, queryset):
         row_getters=_get_chamados_export_row_getters(),
         base_col_widths=CHAMADOS_EXPORT_BASE_COL_WIDTHS,
         nowrap_indices={0, 1, 4},
+        build_rows=_build_rows,
     )
 
 

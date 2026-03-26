@@ -329,6 +329,7 @@ class ControleAtendimento(BaseModel):
     numero_carteirinha = models.CharField(max_length=100, verbose_name="Número da Carteirinha", null=True, blank=True)
     primeiros_socorros = models.CharField(max_length=50, verbose_name="Primeiros Socorros", null=True, blank=True)
     atendimentos = models.BooleanField(verbose_name="Atendimento Realizado?", default=False, db_index=True)
+    recusa_atendimento = models.BooleanField(verbose_name="Recusa de Atendimento?", default=False)
     responsavel_atendimento = models.CharField(max_length=255, verbose_name="Responsável pelo Atendimento", null=True, blank=True)
     seguiu_passeio = models.BooleanField(verbose_name="Seguiu para o Passeio?", default=False)
     houve_remocao = models.BooleanField(verbose_name="Remoção?", default=False)
@@ -389,7 +390,10 @@ class ControleAtendimento(BaseModel):
         if not self.descricao: errors["descricao"] = "A descrição do atendimento é obrigatória."
         if not self.responsavel_atendimento: errors["responsavel_atendimento"] = "O responsável pelo atendimento é obrigatório."
         if self.possui_acompanhante and not self.acompanhante_pessoa_id: errors["acompanhante_pessoa"] = "Informe o acompanhante."
+        if self.possui_acompanhante and not self.grau_parentesco: errors["grau_parentesco"] = "Informe o grau de parentesco."
         if self.houve_remocao and not self.transporte: errors["transporte"] = "Informe o transporte quando houver remoção."
+        if self.houve_remocao and not self.encaminhamento: errors["encaminhamento"] = "Informe o encaminhamento quando houver remoção."
+        if self.houve_remocao and not self.hospital: errors["hospital"] = "Informe o hospital quando houver remoção."
         if self.doenca_preexistente and not self.descricao_doenca: errors["descricao_doenca"] = "Informe a descrição da doença preexistente."
         if self.alergia and not self.descricao_alergia: errors["descricao_alergia"] = "Informe a descrição da alergia."
         if self.plano_saude and not self.nome_plano_saude: errors["nome_plano_saude"] = "Informe o nome do plano de saúde."
@@ -408,6 +412,14 @@ class ControleAtendimento(BaseModel):
         if self.hash_atendimento != novo_hash:
             self.hash_atendimento = novo_hash
             super().save(update_fields=["hash_atendimento"])
+
+    @property
+    def hashes_fotos(self):
+        # Cada Foto ja gera hash_arquivo/hash_arquivo_atual automaticamente ao salvar.
+        return [
+            foto.hash_arquivo_atual or foto.hash_arquivo
+            for foto in self.fotos.all()
+        ]
 
     def __str__(self):
         when = self.data_atendimento.strftime("%d/%m/%Y %H:%M") if self.data_atendimento else "sem data"

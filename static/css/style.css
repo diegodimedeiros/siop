@@ -128,11 +128,13 @@ a {
     width: var(--sidebar-width);
     height: 100vh;
     min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
     background: var(--emerald-light-glass);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-right: 1px solid var(--glass-border);
-    padding: 24px;
+    padding: 24px 24px 24px 10px;
     z-index: 100;
     transition: all var(--transition-normal);
     overflow-y: auto;
@@ -1894,6 +1896,9 @@ label.btn-font-default,
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    max-width: 100%;
+    white-space: normal;
     gap: 10px;
     padding: 14px 28px;
     border: none;
@@ -2425,6 +2430,7 @@ label.btn-font-default,
 
 .btn-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     margin-top: 24px;
     align-items: center;
@@ -2671,6 +2677,8 @@ label.btn-font-default,
 
 .actions-button-stack {
     justify-content: center;
+    width: 100%;
+    align-items: stretch;
 }
 
 .actions-panel-card {
@@ -2679,6 +2687,7 @@ label.btn-font-default,
 
 .actions-panel-card .btn-group {
     margin-top: 0;
+    width: 100%;
 }
 
 .actions-help-block-list {
@@ -3316,6 +3325,14 @@ select option {
     #atendimento-form .file-counter-badge {
         align-self: flex-start;
     }
+
+    .u-hide-tablet {
+        display: none !important;
+    }
+
+    .u-data-table-tablet-fit {
+        min-width: 520px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -3511,6 +3528,17 @@ select option {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
 }
 
+.form-group-settings button.field-invalid,
+.form-group button.field-invalid {
+    border-color: rgba(239, 68, 68, 0.88) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
+}
+
+.upload-panel-card.field-invalid {
+    border-color: rgba(239, 68, 68, 0.88) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
 .field-error-message {
     margin-top: 8px;
     color: #fca5a5;
@@ -3555,6 +3583,14 @@ select option {
 
 .u-btn-group-column {
     flex-direction: column;
+    align-items: stretch;
+}
+
+.u-btn-group-column > .btn,
+.u-btn-group-column > a.btn,
+.u-btn-group-column > button.btn {
+    width: 100%;
+    max-width: none;
 }
 
 .u-btn-group-end {

@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
@@ -83,6 +84,7 @@ def atendimento(request):
                     message="Atendimento cadastrado com sucesso.",
                     status=ApiStatus.CREATED,
                 )
+            messages.success(request, "Atendimento cadastrado com sucesso.")
             return redirect("atendimento")
         except ServiceError as exc:
             if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -96,7 +98,7 @@ def atendimento(request):
             ctx = _atendimento_context()
             ctx["form_error"] = _format_form_error(exc)
             ctx["form_error_details"] = exc.details or {}
-            return render(request, "controle_bc/atendimento.html", ctx, status=400)
+            return render(request, "controle_bc/atendimento/atendimento.html", ctx, status=400)
         except Exception:
             logger.exception("Erro inesperado ao criar atendimento")
             if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -108,6 +110,6 @@ def atendimento(request):
 
             ctx = _atendimento_context()
             ctx["form_error"] = "Erro interno ao processar a solicitação."
-            return render(request, "controle_bc/atendimento.html", ctx, status=500)
+            return render(request, "controle_bc/atendimento/atendimento.html", ctx, status=500)
 
-    return render(request, "controle_bc/atendimento.html", _atendimento_context())
+    return render(request, "controle_bc/atendimento/atendimento.html", _atendimento_context())

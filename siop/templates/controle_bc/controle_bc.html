@@ -4,7 +4,7 @@
 {% block content %}
 <main class="main-content module-page"> 
   <nav class="navbar">
-    <h1 class="page-title"></h1>
+    <h1 class="page-title">Controle BC</h1>
     <div class="navbar-right">
       
       <button class="nav-btn">
@@ -33,38 +33,152 @@
     </div>
   </nav>
   <div class="tabs-container glass-card">
-    <div class="stats-grid">
-      <a class="glass-card stat-card u-block-link" href="{% url 'chamados' %}">
-        <div class="stat-header">
-          <span class="stat-label">Chamados</span>
+    <div>
+      <section class="glass-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Atendimento</div>
+            <div class="card-subtitle">Registro e acompanhamento de atendimentos.</div>
+          </div>
         </div>
-        <div class="stat-value">01</div>
-        <div class="stat-change positive">Painel de chamados do Controle BC.</div>
-      </a>
-
-      <a class="glass-card stat-card u-block-link" href="{% url 'atendimento' %}">
-        <div class="stat-header">
-          <span class="stat-label">Atendimento</span>
+        <div class="stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Na Semana</span>
+            </div>
+            <div class="stat-value weather-temp">{{ atendimento_total_semana }}</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">No Mes</span>
+            </div>
+            <div class="stat-value weather-temp">{{ atendimento_total_mes }}</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="u-meta-stack">
+              <div>
+                <div class="card-subtitle">Area e local com mais chamados</div>
+                <div class="card-title">{{ atendimento_area_local_top }}</div>
+                <div class="u-text-muted">Total de {{ atendimento_area_local_top_total }}</div>
+              </div>
+              <div>
+                <div class="card-subtitle">Principal tipo de atendimento</div>
+                <div class="card-title">{{ atendimento_primeiro_socorro_top }}</div>
+                <div class="u-text-muted">Total de {{ atendimento_primeiro_socorro_top_total }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Ações</div>
+                <div class="card-subtitle">Acessos rápidos da área.</div>
+              </div>
+            </div>
+            <div class="btn-group actions-button-stack u-btn-group-column">
+              <a class="btn btn-secondary" href="{% url 'atendimento' %}">Novo Atendimento</a>
+              <a class="btn btn-secondary" href="{% url 'chamados' %}">Visualizar Atendimento</a>
+            </div>
+          </div>
         </div>
-        <div class="stat-value">02</div>
-        <div class="stat-change positive">Registro e acompanhamento de atendimentos.</div>
-      </a>
-
-      <a class="glass-card stat-card u-block-link" href="{% url 'manejo' %}">
-        <div class="stat-header">
-          <span class="stat-label">Manejo de Fauna</span>
-        </div>
-        <div class="stat-value">02</div>
-        <div class="stat-change positive">Acesso Controle de Manejo de Fauna</div>
-      </a>
-
-      <a class="glass-card stat-card u-block-link" href="{% url 'flora' %}">
-        <div class="stat-header">
-          <span class="stat-label">Flora</span>
-        </div>
-        <div class="stat-value">04</div>
-        <div class="stat-change positive">Acompanhamento das rotinas de flora.</div>
-      </a>
+      </section>
     </div>
   </div>
-  {% endblock %}
+
+  <div class="tabs-container glass-card u-mt-24">
+    <div>
+      <section class="glass-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Manejo de Fauna</div>
+            <div class="card-subtitle">Registro e acompanhamento do manejo de fauna.</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Indicador 01</span>
+            </div>
+            <div class="stat-value weather-temp">01</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Indicador 02</span>
+            </div>
+            <div class="stat-value weather-temp">02</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="u-meta-stack">
+              <div>
+                <div class="card-subtitle">Resumo principal da area</div>
+                <div class="card-title">Manejo de Fauna</div>
+                <div class="u-text-muted">Espaco reservado para indicadores consolidados.</div>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Ações</div>
+                <div class="card-subtitle">Acessos rápidos da área.</div>
+              </div>
+            </div>
+            <div class="btn-group actions-button-stack u-btn-group-column">
+              <a class="btn btn-secondary" href="{% url 'manejo' %}">Novo Manejo</a>
+              <a class="btn btn-secondary" href="{% url 'chamados_manejo' %}">Visualizar Manejo</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="tabs-container glass-card u-mt-24">
+    <div>
+      <section class="glass-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Flora</div>
+            <div class="card-subtitle">Acompanhamento das rotinas de flora.</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Indicador 01</span>
+            </div>
+            <div class="stat-value weather-temp">01</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Indicador 02</span>
+            </div>
+            <div class="stat-value weather-temp">02</div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="u-meta-stack">
+              <div>
+                <div class="card-subtitle">Resumo principal da area</div>
+                <div class="card-title">Flora</div>
+                <div class="u-text-muted">Espaco reservado para indicadores consolidados.</div>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Ações</div>
+                <div class="card-subtitle">Acessos rápidos da área.</div>
+              </div>
+            </div>
+            <div class="btn-group actions-button-stack u-btn-group-column">
+              <a class="btn btn-secondary" href="{% url 'flora' %}">Novo Registro de Flora</a>
+              <button class="btn btn-secondary" type="button">Visualizar Flora</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+{% endblock %}

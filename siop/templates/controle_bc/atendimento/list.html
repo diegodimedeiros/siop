@@ -1,0 +1,74 @@
+{% load tz %}
+<div>
+  <section class="glass-card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Lista de Atendimentos</div>
+        <div class="card-subtitle">Selecione um chamado para visualizar os detalhes.</div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table u-data-table-tablet-fit">
+        <thead class="card-title">
+          <tr>
+            <th>ID</th>
+            <th>Data/Hora</th>
+            <th>Pessoa</th>
+            <th>Área</th>
+            <th>Local</th>
+            <th class="u-hide-tablet">Tipo</th>
+            <th class="u-hide-tablet">Primeiros Socorros</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for chamado in page_obj %}
+          <tr class="controlebc-record-row u-pointer" tabindex="0" role="button"
+            aria-label="Visualizar atendimento {{ chamado.id }}"
+            data-view-url="{% url 'chamados' %}?id={{ chamado.id }}&tab=view{% if q %}&q={{ q|urlencode }}{% endif %}">
+            <td class="table-amount">{{ chamado.id }}</td>
+            <td class="u-text-center">{{ chamado.data_atendimento|localtime|date:"d/m/Y H:i" }}</td>
+            <td>{{ chamado.pessoa.nome }}</td>
+            <td>{{ chamado.area_atendimento }}</td>
+            <td>{{ chamado.local }}</td>
+            <td class="u-hide-tablet">{{ chamado.tipo_ocorrencia }}</td>
+            <td class="u-hide-tablet">{{ chamado.primeiros_socorros|default:"-" }}</td>
+            <td class="u-text-center">
+              {% if chamado.atendimentos %}
+              <span class="status-badge completed">Realizado</span>
+              {% else %}
+              <span class="status-badge pending">Pendente</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="8">Nenhum atendimento encontrado.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+      <a class="pagination-btn" href="?page=1{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Primeira</a>
+      <a class="pagination-btn" href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Anterior</a>
+      {% else %}
+      <span class="pagination-btn disabled">Primeira</span>
+      <span class="pagination-btn disabled">Anterior</span>
+      {% endif %}
+
+      <span class="pagination-info">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+      <a class="pagination-btn" href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Próxima</a>
+      <a class="pagination-btn" href="?page={{ page_obj.paginator.num_pages }}{% if q %}&q={{ q|urlencode }}{% endif %}&tab=list">Última</a>
+      {% else %}
+      <span class="pagination-btn disabled">Próxima</span>
+      <span class="pagination-btn disabled">Última</span>
+      {% endif %}
+    </div>
+  </section>
+</div>

@@ -176,21 +176,6 @@ Observacao:
 - Checagem de padrao backend: `python3 scripts/check_backend_patterns.py`
 - Smoke tests backend: `python3 manage.py test siop`
 
-## Perfil da Aplicação
-
-Este não parece ser um site público. O perfil observado é de uma aplicação administrativa interna, usada por equipes operacionais para registrar atividades do dia a dia, manter histórico dos eventos e gerar relatórios.
-
-## Situação Técnica Observada
-
-Pontos positivos:
-
-- domínio relativamente bem modelado;
-- separação clara entre views, services e utils compartilhados;
-- contrato JSON padronizado na camada principal da API;
-- suporte a exportação e rastreabilidade de arquivos;
-- smoke tests de contrato backend ativos;
-- configuracao sensivel movida para ambiente.
-
 ## Resumo
 
 O projeto é um sistema operacional interno para registro e acompanhamento de ocorrências, acessos, atendimentos e manejo, com foco em controle administrativo, evidências e geração de relatórios.
